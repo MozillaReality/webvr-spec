@@ -1,0 +1,180 @@
+<h1>WebVR</h1>
+
+<pre class='metadata'>
+Status: ED
+ED: https://github.com/MozVR/webvr-spec/blob/master/webvr.html
+Shortname: webvr
+Level: 1
+Editor: Vladimir Vukicevic, Mozilla http://mozilla.com/, vladimir@mozilla.com
+Abstract: This specification describes support for accessing virtual reality devices, including sensors and head-mounted displays on the Web.
+Mailing List: web-vr-discuss@mozilla.org
+Mailing List Archives: https://mail.mozilla.org/pipermail/web-vr-discuss/
+</pre>
+
+# Introduction # {#intro}
+
+Some introductory notes about WebVR here.
+
+# Supported Device Types # {#devtypes}
+
+# Security # {#security}
+
+Some information about security considerations here.
+
+# DOM Interfaces # {#dom}
+
+This section describes the interfaces and functionality added to the DOM to support runtime access to the functionality described above.
+
+## VREye
+
+<pre class="idl">
+
+enum VREye { "left", "right" };
+
+</pre>
+
+## VRFieldOfView
+
+The {{VRFieldOfView}} interface represents a field of view, as given by 4 degrees describing the view from a center point.
+
+<pre class="idl">
+
+interface VRFieldOfViewReadOnly {
+  readonly attribute double upDegrees;
+  readonly attribute double rightDegrees;
+  readonly attribute double downDegrees;
+  readonly attribute double leftDegrees;
+};
+
+dictionary VRFieldOfViewInit {
+  double upDegrees = 0.0;
+  double rightDegrees = 0.0;
+  double downDegrees = 0.0;
+  double leftDegrees = 0.0;
+};
+
+[Constructor(optional VRFieldOfViewInit fov),
+ Constructor(double upDegrees, double rightDegrees, double downDegrees, double leftDegrees)]
+interface VRFieldOfView : VRFieldOfViewReadOnly {
+  inherit attribute double upDegrees;
+  inherit attribute double rightDegrees;
+  inherit attribute double downDegrees;
+  inherit attribute double leftDegrees;
+};
+
+</pre>
+
+## VRPositionState
+
+The {{VRPositionState}} interface represents a sensor's state at a given timestamp.
+
+<pre class="idl">
+interface VRPositionState {
+  readonly attribute double timeStamp;
+
+  readonly attribute boolean hasPosition;
+  readonly attribute DOMPoint? position;
+  readonly attribute DOMPoint? linearVelocity;
+  readonly attribute DOMPoint? linearAcceleration;
+
+  readonly attribute boolean hasOrientation;
+  // XXX should be DOMQuaternion as soon as we add that
+  readonly attribute DOMPoint? orientation;
+  readonly attribute DOMPoint? angularVelocity;
+  readonly attribute DOMPoint? angularAcceleration;
+};
+</pre>
+
+## VRDevice
+
+The {{VRDevice}} interface forms the base of all VR devices supported by this API.  It includes generic information such as device IDs and descriptions.
+
+<pre class="idl">
+interface VRDevice {
+  /**
+   * An identifier for the distinct hardware unit that this
+   * VR Device is a part of.  All VRDevice/Sensors that come
+   * from the same hardware will have the same hardwareId
+   */
+  readonly attribute DOMString hardwareUnitId;
+
+  /**
+   * An identifier for this distinct sensor/device on a physical
+   * hardware device.  This shouldn't change across browser
+   * restrats, allowing configuration data to be saved based on it.
+   */
+  readonly attribute DOMString deviceId;
+
+  /**
+   * a device name, a user-readable name identifying it
+   */
+  readonly attribute DOMString deviceName;
+};
+</pre>
+
+## HMDVRDevice
+
+The {{HMDVRDevice}} interface represents a {{VRDevice}} for a head-mounted display.  It contains configuration and information about the HMD.
+
+<pre class="idl">
+interface HMDVRDevice : VRDevice {
+  /* The translation that should be applied to the view matrix for rendering each eye */
+  DOMPoint getEyeTranslation(VREye whichEye);
+
+  // the FOV that the HMD was configured with
+  VRFieldOfView getCurrentEyeFieldOfView(VREye whichEye);
+
+  // the recommended FOV, per eye.
+  VRFieldOfView getRecommendedEyeFieldOfView(VREye whichEye);
+
+  // the maximum FOV, per eye.  Above this, rendering will look broken.
+  VRFieldOfView getMaximumEyeFieldOfView(VREye whichEye);
+
+  // Set a field of view.  If either of the fields of view is null,
+  // or if their values are all zeros, then the recommended field of view
+  // for that eye will be used.
+  void setFieldOfView(optional VRFieldOfViewInit leftFOV,
+                      optional VRFieldOfViewInit rightFOV,
+                      optional double zNear = 0.01,
+                      optional double zFar = 10000.0);
+
+  // return a recommended rect for this eye.  Only useful for Canvas rendering,
+  // the x/y coordinates will be the location in the canvas where this eye should
+  // begin, and the width/height are the dimensions.  Any canvas in the appropriate
+  // ratio will work.
+  DOMRect getRecommendedEyeRenderRect(VREye whichEye);
+};
+</pre>
+
+## PositionSensorVRDevice
+
+The {{PositionSensorVRDevice}} interface represents a {{VRDevice}} for a sensor that can report position and/or orientation.
+
+<pre class="idl">
+interface PositionSensorVRDevice : VRDevice {
+  /*
+   * Return a VRPositionState dictionary containing the state of this position sensor state
+   * for the current frame (if within a requestAnimationFrame context) or for the previous
+   * frame.  This state may be predicted based on the implementation's frame scheduling.
+   *
+   * The VRPositionState will contain the position, orientation, and velocity
+   * and acceleration of each of these properties.  Use "hasPosition" and "hasOrientation"
+   * to check if the associated members are valid; if these are false, those members
+   * will be null.
+   */
+  VRPositionState getState();
+
+  /*
+   * Return the current instantaneous sensor state.
+   */
+  VRPositionState getImmediateState();
+
+  /*
+   * Zero this sensor, treating its current position and orientation
+   * as the "origin/zero" values.
+   */
+  void zeroSensor();
+};
+</pre>
+
+# Acknowledgements # {#ack}
