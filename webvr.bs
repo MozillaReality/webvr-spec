@@ -6,6 +6,7 @@ ED: https://github.com/MozVR/webvr-spec/blob/master/webvr.html
 Shortname: webvr
 Level: 1
 Editor: Vladimir Vukicevic, Mozilla http://mozilla.com/, vladimir@mozilla.com
+Editor: Brandon Jones, Google http://google.com/, bajones@google.com
 Abstract: This specification describes support for accessing virtual reality devices, including sensors and head-mounted displays on the Web.
 Mailing List: web-vr-discuss@mozilla.org
 Mailing List Archives: https://mail.mozilla.org/pipermail/web-vr-discuss/
@@ -116,6 +117,58 @@ interface VRPositionState {
   readonly attribute DOMPoint? angularAcceleration;
 };
 </pre>
+
+### Attributes
+
+<dfn attribute for=VRPositionState>timeStamp</dfn>
+Monotonically increasing value that allows the author to determine if position
+state data been updated from the hardware. Since values are monotonically
+increasing they can be compared to determine the ordering of updates, as newer
+values will always be greater than or equal to older values.
+
+<dfn attribute for=VRPositionState>hasPosition</dfn>
+True if the {{position}} attribute is valid. If false {{position}} MUST be null.
+
+<dfn attribute for=VRPositionState>position</dfn>
+Position of the sensor at {{timeStamp}} as a 3D vector. Position is given in
+meters from an origin point, which is either the position the sensor was first
+read at or the position of the sensor at the point that resetSensor was last
+called. The coordinate system uses these axis definitions:
+<ul>
+ <li>Positive X is to the users right.</li>
+ <li>Positive Y is up.</li>
+ <li>Positive Z is behind the user.</li>
+</ul>
+All positions are given relative to the identity orientation. The w component 
+MUST be 0. May be null if the sensor is incapable of providing positional data.
+
+<dfn attribute for=VRPositionState>linearVelocity</dfn>
+Linear velocity of the sensor at {{timeStamp}}. The w component MUST be 0.
+May be null if the sensor is incapable of providing linear velocity.
+
+<dfn attribute for=VRPositionState>linearAcceleration</dfn>
+Linear acceleration of the sensor at {{timeStamp}}. The w component MUST be 0.
+May be null if the sensor is incapable of providing linear acceleration.
+
+<dfn attribute for=VRPositionState>hasOrientation</dfn>
+True if the {{orientation}} attribute is valid. If false {{orientation}} MUST be
+null.
+
+<dfn attribute for=VRPositionState>orientation</dfn>
+Orientation of the sensor at {{timeStamp}} as a quaternion. The orientation yaw
+(rotation around the Y axis) is relative to the initial yaw of the sensor when
+it was first read or the yaw of the sensor at the point that resetSensor was
+last called. An orientation of {x: 0, y: 0, z: 0, w: 1} is considered to be
+"forward". May be null if the sensor is incapable of providing
+orientation data.
+
+<dfn attribute for=VRPositionState>angularVelocity</dfn>
+Angular velocity of the sensor at {{timeStamp}}. The w component MUST be 0.
+May be null if the sensor is incapable of providing angular velocity.
+
+<dfn attribute for=VRPositionState>angularAcceleration</dfn>
+Angular acceleration of the sensor at {{timeStamp}}. The w component MUST be 0.
+May be null if the sensor is incapable of providing angular acceleration.
 
 ## EyeParameters
 
