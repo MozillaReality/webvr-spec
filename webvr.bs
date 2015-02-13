@@ -28,9 +28,7 @@ This section describes the interfaces and functionality added to the DOM to supp
 ## VREye
 
 <pre class="idl">
-
 enum VREye { "left", "right" };
-
 </pre>
 
 ## VRFieldOfView
@@ -38,7 +36,6 @@ enum VREye { "left", "right" };
 The {{VRFieldOfView}} interface represents a field of view, as given by 4 degrees describing the view from a center point.
 
 <pre class="idl">
-
 interface VRFieldOfViewReadOnly {
   readonly attribute double upDegrees;
   readonly attribute double rightDegrees;
@@ -61,8 +58,43 @@ interface VRFieldOfView : VRFieldOfViewReadOnly {
   inherit attribute double downDegrees;
   inherit attribute double leftDegrees;
 };
-
 </pre>
+
+<div class="example">
+The following code snippet creates a WebGL-compatible projection matrix from a
+{{VRFieldOfView}}.
+
+<pre>
+function fieldOfViewToProjectionMatrix(fov, zNear, zFar) {
+  var upTan = Math.tan(fov.upDegrees * Math.PI/180.0);
+  var downTan = Math.tan(fov.downDegrees * Math.PI/180.0);
+  var leftTan = Math.tan(fov.leftDegrees * Math.PI/180.0);
+  var rightTan = Math.tan(fov.rightDegrees * Math.PI/180.0);
+  var xScale = 2.0 / (leftTan + rightTan);
+  var yScale = 2.0 / (upTan + downTan);
+
+  var out = new Float32Array(16);
+  out[0] = xScale;
+  out[1] = 0.0;
+  out[2] = 0.0;
+  out[3] = 0.0;
+  out[4] = 0.0;
+  out[5] = yScale;
+  out[6] = 0.0;
+  out[7] = 0.0;
+  out[8] = -((leftTan - rightTan) * xScale * 0.5);
+  out[9] = ((upTan - downTan) * yScale * 0.5);
+  out[10] = -(zNear + zFar) / (zFar - zNear);
+  out[11] = -1.0;
+  out[12] = 0.0;
+  out[13] = 0.0;
+  out[14] = -(2.0 * zFar * zNear) / (zFar - zNear);
+  out[15] = 0.0;
+
+  return out;
+}
+</pre>
+</div>
 
 ## VRPositionState
 
@@ -85,36 +117,9 @@ interface VRPositionState {
 };
 </pre>
 
-## VRDevice
+## EyeParameters
 
-The {{VRDevice}} interface forms the base of all VR devices supported by this API.  It includes generic information such as device IDs and descriptions.
-
-<pre class="idl">
-interface VRDevice {
-  /**
-   * An identifier for the distinct hardware unit that this
-   * VR Device is a part of.  All VRDevice/Sensors that come
-   * from the same hardware will have the same hardwareId
-   */
-  readonly attribute DOMString hardwareUnitId;
-
-  /**
-   * An identifier for this distinct sensor/device on a physical
-   * hardware device.  This shouldn't change across browser
-   * restrats, allowing configuration data to be saved based on it.
-   */
-  readonly attribute DOMString deviceId;
-
-  /**
-   * a device name, a user-readable name identifying it
-   */
-  readonly attribute DOMString deviceName;
-};
-</pre>
-
-## HMDVRDevice
-
-The {{HMDVRDevice}} interface represents a {{VRDevice}} for a head-mounted display.  It contains configuration and information about the HMD.
+The {{EyeParameters}} interface represents all the information required to correctly render a scene for a given eye.
 
 <pre class="idl">
 interface EyeParameters {
@@ -128,17 +133,96 @@ interface EyeParameters {
   readonly attribute VRFieldOfView currentFieldOfView;
   readonly attribute DOMRect renderRect;
 };
+</pre>
 
+### Attributes
+
+<dfn attribute for=EyeParameters>minimumFieldOfView</dfn>
+Describes the minimum supported field of view for the eye.
+
+<dfn attribute for=EyeParameters>maximumFieldOfView</dfn>
+Describes the maximum supported field of view for the eye.
+
+<dfn attribute for=EyeParameters>recommendedFieldOfView</dfn>
+Describes the recommended field of view for the eye. It is RECOMMENDED that this
+be set to a value based on user calibration.
+
+<dfn attribute for=EyeParameters>eyeTranslation</dfn>
+Offset from the center of the users head to the eye in meters. This value SHOULD
+represent the users inter-pupilary distance (IPD), but may also represent the
+distance from the centerpoint of the headset to the centerpoint of the lense for
+the given eye. Values for the left eye MUST be negative, values for the right
+eye MUST be positive.
+
+<dfn attribute for=EyeParameters>currentFieldOfView</dfn>
+The current field of view for the eye, as specified by setFieldOfView.
+Defaults to {{recommendedFieldOfView}}.
+
+<dfn attribute for=EyeParameters>renderRect</dfn>
+Describes the viewport of a canvas into which visuals for this eye should be
+rendered. The {{renderRect}} for the left eye and right eye MUST NOT overlap,
+and the {{renderRect}} for the rightEye MUST be to the right of the
+{{renderRect}} for the left eye.
+
+The union of the {{renderRect}}s for both eyes SHOULD describe the optimal
+rendering resolution for the HMD when using {{currentFieldOfView}}, such that
+the center of the users view maintains a 1:1 pixel ratio after any distortion
+to correct for HMD optics is applied to the rendering.
+
+<div class="example">
+Many HMDs will distort the rendered image to counteract undesired effects
+introduced by the headset optics. Because of this the optimal resolution of the
+canvas will often be larger than the HMDs physical resolution to ensure that
+the final image presented to users has a 1:1 pixel ratio at the center of the
+users view. The optimal canvas resolution can be calculated from the
+{{renderRect}} for both eyes as follows:
+
+<pre>
+var leftEyeParams = hmd.getEyeParameters(“left”);
+var rightEyeParams = hmd.getEyeParameters(“right”);
+var leftEyeRect = leftEyeParams.renderRect;
+var rightEyeRect = rightEyeParams.renderRect;
+
+canvas.width = rightEyeRect.x + rightEyeRect.width;
+canvas.height = Math.max(leftEyeRect.y + leftEyeRect.height,
+                         rightEyeRect.y + rightEyeRect.height);
+</pre>
+</div>
+
+## VRDevice
+
+The {{VRDevice}} interface forms the base of all VR devices supported by this API.  It includes generic information such as device IDs and descriptions.
+
+<pre class="idl">
+interface VRDevice {
+  readonly attribute DOMString hardwareUnitId;
+  readonly attribute DOMString deviceId;
+  readonly attribute DOMString deviceName;
+};
+</pre>
+
+### Attributes
+
+<dfn attribute for=VRDevice>hardwareUnitId</dfn>
+An identifier for the distinct hardware unit that this {{VRDevice}} is a part
+of. Any {{VRDevice}} that comes from the same physical piece of hardware will
+have the same {{hardwareUnitId}}.
+
+<dfn attribute for=VRDevice>deviceId</dfn>
+An identifier for this distinct sensor/device on a physical hardware device.
+This shouldn't change across browser restarts, allowing configuration data to be
+saved based on it.
+
+<dfn attribute for=VRDevice>deviceName</dfn>
+A user-readable name identifying the device.
+
+## HMDVRDevice
+
+The {{HMDVRDevice}} interface represents a {{VRDevice}} for a head-mounted display.  It contains configuration and information about the HMD.
+
+<pre class="idl">
 interface HMDVRDevice : VRDevice {
-  /* Return the parameters for the given eye */
   EyeParameters getEyeParameters(VREye whichEye);
-
-  /* Set a field of view for both eyes.  If either of the fields of view is null,
-   * or if their values are all zeros, then the recommended field of view
-   * for that eye will be used.
-   *
-   * zNear and zFar configure the depth range for CSS-based rendering.
-   */
   void setFieldOfView(optional VRFieldOfViewInit leftFOV,
                       optional VRFieldOfViewInit rightFOV,
                       optional double zNear = 0.01,
@@ -146,35 +230,48 @@ interface HMDVRDevice : VRDevice {
 };
 </pre>
 
+### Methods
+
+<dfn method for=HMDVRDevice>getEyeParameters(VREye whichEye)</dfn>
+Return the current {{EyeParameters}} for the given eye.
+
+<dfn method for=HMDVRDevice>setFieldOfView(optional VRFieldOfViewInit leftFOV, optional VRFieldOfViewInit rightFOV, optional double zNear = 0.01, optional double zFar = 10000.0)</dfn>
+Set the field of view for both eyes.  If either of the fields of view is null,
+or if their values are all zeros, then the {{recommendedFieldOfView}} for that
+eye will be used. If the field of view values for an eye exceed the
+{{minimumFieldOfView}} or {{maximumFieldOfView}} values for the same eye the
+values will be clamped to the valid range.
+
 ## PositionSensorVRDevice
 
 The {{PositionSensorVRDevice}} interface represents a {{VRDevice}} for a sensor that can report position and/or orientation.
 
 <pre class="idl">
 interface PositionSensorVRDevice : VRDevice {
-  /*
-   * Return a VRPositionState dictionary containing the state of this position sensor state
-   * for the current frame (if within a requestAnimationFrame context) or for the previous
-   * frame.  This state may be predicted based on the implementation's frame scheduling.
-   *
-   * The VRPositionState will contain the position, orientation, and velocity
-   * and acceleration of each of these properties.  Use "hasPosition" and "hasOrientation"
-   * to check if the associated members are valid; if these are false, those members
-   * will be null.
-   */
   VRPositionState getState();
-
-  /*
-   * Return the current instantaneous sensor state.
-   */
   VRPositionState getImmediateState();
-
-  /*
-   * Zero this sensor, treating its current position and orientation
-   * as the "origin/zero" values.
-   */
-  void zeroSensor();
+  void resetSensor();
 };
 </pre>
+
+### Methods
+
+<dfn method for=HMDVRDevice>getState()</dfn>
+Return a {{VRPositionState}} dictionary containing the state of this position
+sensor state for the current frame (if within a requestAnimationFrame context)
+or for the previous frame. This state may be predicted based on the
+implementation's frame scheduling.
+
+The VRPositionState will contain the position, orientation, and velocity and
+acceleration of each of these properties. Use {{hasPosition}} and
+{{hasOrientation}} to check if the associated members are valid;
+If these are false, those members MUST be null.
+
+<dfn method for=HMDVRDevice>getImmediateState()</dfn>
+Return the current instantaneous sensor state.
+
+<dfn method for=HMDVRDevice>resetSensor()</dfn>
+Reset this sensor, treating its current position and orientation yaw as the
+"origin/zero" values.
 
 # Acknowledgements # {#ack}
