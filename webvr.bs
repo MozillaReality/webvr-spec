@@ -14,9 +14,23 @@ Mailing List Archives: https://mail.mozilla.org/pipermail/web-vr-discuss/
 
 # Introduction # {#intro}
 
-Some introductory notes about WebVR here.
+Hardware that enables Virtual Reality applications requires high-precision, low-latency interfaces to deliver an acceptable experience.
+Other interfaces, such as device orientation events, can be repurposed to surface VR input but doing so dilutes the interface's original
+intent and often does not provide the precision necessary for high quality VR. The WebVR API provides purpose-built interfaces
+to VR hardware to allow developers to build compelling, comfortable VR experiences.
 
 # Supported Device Types # {#devtypes}
+
+At this time there are two defined variants of VRDevice, each of which is intended to describe a specific capability of a piece of hardware
+rather than all aspects of that hardware. For example, a typical Head Mounted Display such as an Oculus Rift will be exposed as two VRDevices:
+An HMDVRDevice that describes the the optical properties of the device, including Field of View and Inter-pupilary Distance, and a
+PositionSensorVRDevice, which describes the HMDs position and orientation in space.
+
+A PositionSensorVRDevice could also be provided without a corresponding HMDVRDevice to represent a piece of hardware that tracks position
+but does not have a display, such as a Six-degree-of-freedom controller.
+
+Additional VRDevice types may be added over time to expose new hardware types or features as they becomes available to consumers.
+Eye tracking is an example of a potential future interface.
 
 # Security # {#security}
 

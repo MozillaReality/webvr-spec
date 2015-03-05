@@ -46,6 +46,18 @@ interface VRPositionState {
   readonly attribute DOMPoint? angularAcceleration;
 };
 
+interface EyeParameters {
+  /* These values are expected to be static per-device/per-user */
+  readonly attribute VRFieldOfView minimumFieldOfView;
+  readonly attribute VRFieldOfView maximumFieldOfView;
+  readonly attribute VRFieldOfView recommendedFieldOfView;
+  readonly attribute DOMPoint eyeTranslation;
+
+  /* These values will vary after a FOV has been set */
+  readonly attribute VRFieldOfView currentFieldOfView;
+  readonly attribute DOMRect renderRect;
+};
+
 interface VRDevice {
   /**
    * An identifier for the distinct hardware unit that this
@@ -68,17 +80,8 @@ interface VRDevice {
 };
 
 interface HMDVRDevice : VRDevice {
-  /* The translation that should be applied to the view matrix for rendering each eye */
-  DOMPoint getEyeTranslation(VREye whichEye);
-
-  // the FOV that the HMD was configured with
-  VRFieldOfView getCurrentEyeFieldOfView(VREye whichEye);
-
-  // the recommended FOV, per eye.
-  VRFieldOfView getRecommendedEyeFieldOfView(VREye whichEye);
-
-  // the maximum FOV, per eye.  Above this, rendering will look broken.
-  VRFieldOfView getMaximumEyeFieldOfView(VREye whichEye);
+  // Return the current EyeParameters for the given eye.
+  EyeParameters getEyeParameters(VREye whichEye);
 
   // Set a field of view.  If either of the fields of view is null,
   // or if their values are all zeros, then the recommended field of view
@@ -87,15 +90,6 @@ interface HMDVRDevice : VRDevice {
                       optional VRFieldOfViewInit rightFOV,
                       optional double zNear = 0.01,
                       optional double zFar = 10000.0);
-
-  // return a recommended rect for this eye.  Only useful for Canvas rendering,
-  // the x/y coordinates will be the location in the canvas where this eye should
-  // begin, and the width/height are the dimensions.  Any canvas in the appropriate
-  // ratio will work.
-  DOMRect getRecommendedEyeRenderRect(VREye whichEye);
-
-  // hack for testing
-  void xxxToggleElementVR(Element element);
 };
 
 interface PositionSensorVRDevice : VRDevice {
@@ -110,8 +104,13 @@ interface PositionSensorVRDevice : VRDevice {
    */
   VRPositionState getState(optional double timeOffset = 0.0);
 
-  /* Zero this sensor, treating its current position and orientation
+  /*
+   * Return the current instantaneous sensor state.
+   */
+  VRPositionState getImmediateState();
+
+  /* Reset this sensor, treating its current position and orientation
    * as the "origin/zero" values.
    */
-  void zeroSensor();
+  void resetSensor();
 };
