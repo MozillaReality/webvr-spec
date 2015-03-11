@@ -94,15 +94,16 @@ interface HMDVRDevice : VRDevice {
 
 interface PositionSensorVRDevice : VRDevice {
   /*
-   * Return a VRPositionState dictionary containing the state of this position sensor,
-   * at an optional past time or predicted for a future time if timeOffset is != 0.
+   * Return a VRPositionState dictionary containing the state of this position sensor
+   * for the current frame if within a requestAnimationFrame callback, or for the
+   * previous frame if not.
    *
    * The VRPositionState will contain the position, orientation, and velocity
    * and acceleration of each of these properties.  Use "hasPosition" and "hasOrientation"
    * to check if the associated members are valid; if these are false, those members
    * will be null.
    */
-  VRPositionState getState(optional double timeOffset = 0.0);
+  VRPositionState getState();
 
   /*
    * Return the current instantaneous sensor state.
