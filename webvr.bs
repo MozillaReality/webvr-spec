@@ -184,12 +184,12 @@ May be null if the sensor is incapable of providing angular velocity.
 Angular acceleration of the sensor at {{timeStamp}}. The w component MUST be 0.
 May be null if the sensor is incapable of providing angular acceleration.
 
-## EyeParameters
+## VREyeParameters
 
-The {{EyeParameters}} interface represents all the information required to correctly render a scene for a given eye.
+The {{VREyeParameters}} interface represents all the information required to correctly render a scene for a given eye.
 
 <pre class="idl">
-interface EyeParameters {
+interface VREyeParameters {
   /* These values are expected to be static per-device/per-user */
   readonly attribute VRFieldOfView minimumFieldOfView;
   readonly attribute VRFieldOfView maximumFieldOfView;
@@ -204,28 +204,28 @@ interface EyeParameters {
 
 ### Attributes
 
-<dfn attribute for=EyeParameters>minimumFieldOfView</dfn>
+<dfn attribute for=VREyeParameters>minimumFieldOfView</dfn>
 Describes the minimum supported field of view for the eye.
 
-<dfn attribute for=EyeParameters>maximumFieldOfView</dfn>
+<dfn attribute for=VREyeParameters>maximumFieldOfView</dfn>
 Describes the maximum supported field of view for the eye.
 
-<dfn attribute for=EyeParameters>recommendedFieldOfView</dfn>
+<dfn attribute for=VREyeParameters>recommendedFieldOfView</dfn>
 Describes the recommended field of view for the eye. It is RECOMMENDED that this
 be set to a value based on user calibration.
 
-<dfn attribute for=EyeParameters>eyeTranslation</dfn>
+<dfn attribute for=VREyeParameters>eyeTranslation</dfn>
 Offset from the center of the users head to the eye in meters. This value SHOULD
 represent the users inter-pupilary distance (IPD), but may also represent the
 distance from the centerpoint of the headset to the centerpoint of the lense for
 the given eye. Values for the left eye MUST be negative, values for the right
 eye MUST be positive.
 
-<dfn attribute for=EyeParameters>currentFieldOfView</dfn>
+<dfn attribute for=VREyeParameters>currentFieldOfView</dfn>
 The current field of view for the eye, as specified by setFieldOfView.
 Defaults to {{recommendedFieldOfView}}.
 
-<dfn attribute for=EyeParameters>renderRect</dfn>
+<dfn attribute for=VREyeParameters>renderRect</dfn>
 Describes the viewport of a canvas into which visuals for this eye should be
 rendered. The {{renderRect}} for the left eye and right eye MUST NOT overlap,
 and the {{renderRect}} for the rightEye MUST be to the right of the
@@ -289,7 +289,7 @@ The {{HMDVRDevice}} interface represents a {{VRDevice}} for a head-mounted displ
 
 <pre class="idl">
 interface HMDVRDevice : VRDevice {
-  EyeParameters getEyeParameters(VREye whichEye);
+  VREyeParameters getEyeParameters(VREye whichEye);
   void setFieldOfView(optional VRFieldOfViewInit leftFOV,
                       optional VRFieldOfViewInit rightFOV,
                       optional double zNear = 0.01,
@@ -300,7 +300,7 @@ interface HMDVRDevice : VRDevice {
 ### Methods
 
 <dfn method for=HMDVRDevice>getEyeParameters(VREye whichEye)</dfn>
-Return the current {{EyeParameters}} for the given eye.
+Return the current {{VREyeParameters}} for the given eye.
 
 <dfn method for=HMDVRDevice>setFieldOfView(optional VRFieldOfViewInit leftFOV, optional VRFieldOfViewInit rightFOV, optional double zNear = 0.01, optional double zFar = 10000.0)</dfn>
 Set the field of view for both eyes.  If either of the fields of view is null,

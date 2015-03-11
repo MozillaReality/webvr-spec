@@ -46,7 +46,7 @@ interface VRPositionState {
   readonly attribute DOMPoint? angularAcceleration;
 };
 
-interface EyeParameters {
+interface VREyeParameters {
   /* These values are expected to be static per-device/per-user */
   readonly attribute VRFieldOfView minimumFieldOfView;
   readonly attribute VRFieldOfView maximumFieldOfView;
@@ -80,8 +80,8 @@ interface VRDevice {
 };
 
 interface HMDVRDevice : VRDevice {
-  // Return the current EyeParameters for the given eye.
-  EyeParameters getEyeParameters(VREye whichEye);
+  // Return the current VREyeParameters for the given eye.
+  VREyeParameters getEyeParameters(VREye whichEye);
 
   // Set a field of view.  If either of the fields of view is null,
   // or if their values are all zeros, then the recommended field of view

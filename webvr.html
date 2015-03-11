@@ -562,7 +562,7 @@ span.issue, span.note {
    <h1 class="p-name no-ref" id="title">WebVR</h1>
   
    <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft,
-    <time class="dt-updated" datetime="2015-03-05">5 March 2015</time></span></h2>
+    <time class="dt-updated" datetime="2015-03-11">11 March 2015</time></span></h2>
   
    <div data-fill-with="spec-metadata">
     <dl>
@@ -581,7 +581,7 @@ span.issue, span.note {
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a>
 To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 5 March 2015,
+In addition, as of 11 March 2015,
 the editors have made this specification available under the
 <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
@@ -617,7 +617,7 @@ Parts of this work may be from another specification document.  If so, those par
        <ul class="toc">
         <li><a href="#attributes"><span class="secno">4.3.1</span> <span class="content">Attributes</span></a>
        </ul>
-      <li><a href="#eyeparameters"><span class="secno">4.4</span> <span class="content">EyeParameters</span></a>
+      <li><a href="#vreyeparameters"><span class="secno">4.4</span> <span class="content">VREyeParameters</span></a>
        <ul class="toc">
         <li><a href="#attributes0"><span class="secno">4.4.1</span> <span class="content">Attributes</span></a>
        </ul>
@@ -857,22 +857,22 @@ Angular acceleration of the sensor at <code class="idl"><a data-link-type="idl" 
 May be null if the sensor is incapable of providing angular acceleration.</p>
 
 
-   <h3 class="heading settled" data-level="4.4" id="eyeparameters"><span class="secno">4.4. </span><span class="content">EyeParameters</span><a class="self-link" href="#eyeparameters"></a></h3>
+   <h3 class="heading settled" data-level="4.4" id="vreyeparameters"><span class="secno">4.4. </span><span class="content">VREyeParameters</span><a class="self-link" href="#vreyeparameters"></a></h3>
 
 
-   <p>The <code class="idl"><a data-link-type="idl" href="#eyeparameters0">EyeParameters</a></code> interface represents all the information required to correctly render a scene for a given eye.</p>
+   <p>The <code class="idl"><a data-link-type="idl" href="#vreyeparameters0">VREyeParameters</a></code> interface represents all the information required to correctly render a scene for a given eye.</p>
 
 
-   <pre class="idl">interface <dfn class="idl-code" data-dfn-type="interface" data-export="" data-global-name="" id="eyeparameters0">EyeParameters<a class="self-link" href="#eyeparameters0"></a></dfn> {
+   <pre class="idl">interface <dfn class="idl-code" data-dfn-type="interface" data-export="" data-global-name="" id="vreyeparameters0">VREyeParameters<a class="self-link" href="#vreyeparameters0"></a></dfn> {
   /* These values are expected to be static per-device/per-user */
-  readonly attribute <a data-link-type="idl-name" href="#vrfieldofview0">VRFieldOfView</a> <a class="idl-code" data-global-name="EyeParameters<interface>/minimumFieldOfView<attribute>" data-link-type="attribute" data-readonly="" data-type="VRFieldOfView " href="#dom-eyeparameters-minimumfieldofview">minimumFieldOfView</a>;
-  readonly attribute <a data-link-type="idl-name" href="#vrfieldofview0">VRFieldOfView</a> <a class="idl-code" data-global-name="EyeParameters<interface>/maximumFieldOfView<attribute>" data-link-type="attribute" data-readonly="" data-type="VRFieldOfView " href="#dom-eyeparameters-maximumfieldofview">maximumFieldOfView</a>;
-  readonly attribute <a data-link-type="idl-name" href="#vrfieldofview0">VRFieldOfView</a> <a class="idl-code" data-global-name="EyeParameters<interface>/recommendedFieldOfView<attribute>" data-link-type="attribute" data-readonly="" data-type="VRFieldOfView " href="#dom-eyeparameters-recommendedfieldofview">recommendedFieldOfView</a>;
-  readonly attribute <a data-link-type="idl-name" href="http://dev.w3.org/fxtf/geometry/#dom-dompoint">DOMPoint</a> <a class="idl-code" data-global-name="EyeParameters<interface>/eyeTranslation<attribute>" data-link-type="attribute" data-readonly="" data-type="DOMPoint " href="#dom-eyeparameters-eyetranslation">eyeTranslation</a>;
+  readonly attribute <a data-link-type="idl-name" href="#vrfieldofview0">VRFieldOfView</a> <a class="idl-code" data-global-name="VREyeParameters<interface>/minimumFieldOfView<attribute>" data-link-type="attribute" data-readonly="" data-type="VRFieldOfView " href="#dom-vreyeparameters-minimumfieldofview">minimumFieldOfView</a>;
+  readonly attribute <a data-link-type="idl-name" href="#vrfieldofview0">VRFieldOfView</a> <a class="idl-code" data-global-name="VREyeParameters<interface>/maximumFieldOfView<attribute>" data-link-type="attribute" data-readonly="" data-type="VRFieldOfView " href="#dom-vreyeparameters-maximumfieldofview">maximumFieldOfView</a>;
+  readonly attribute <a data-link-type="idl-name" href="#vrfieldofview0">VRFieldOfView</a> <a class="idl-code" data-global-name="VREyeParameters<interface>/recommendedFieldOfView<attribute>" data-link-type="attribute" data-readonly="" data-type="VRFieldOfView " href="#dom-vreyeparameters-recommendedfieldofview">recommendedFieldOfView</a>;
+  readonly attribute <a data-link-type="idl-name" href="http://dev.w3.org/fxtf/geometry/#dom-dompoint">DOMPoint</a> <a class="idl-code" data-global-name="VREyeParameters<interface>/eyeTranslation<attribute>" data-link-type="attribute" data-readonly="" data-type="DOMPoint " href="#dom-vreyeparameters-eyetranslation">eyeTranslation</a>;
 
   /* These values will vary after a FOV has been set */
-  readonly attribute <a data-link-type="idl-name" href="#vrfieldofview0">VRFieldOfView</a> <a class="idl-code" data-global-name="EyeParameters<interface>/currentFieldOfView<attribute>" data-link-type="attribute" data-readonly="" data-type="VRFieldOfView " href="#dom-eyeparameters-currentfieldofview">currentFieldOfView</a>;
-  readonly attribute <a data-link-type="idl-name" href="http://dev.w3.org/fxtf/geometry/#dom-domrect">DOMRect</a> <a class="idl-code" data-global-name="EyeParameters<interface>/renderRect<attribute>" data-link-type="attribute" data-readonly="" data-type="DOMRect " href="#dom-eyeparameters-renderrect">renderRect</a>;
+  readonly attribute <a data-link-type="idl-name" href="#vrfieldofview0">VRFieldOfView</a> <a class="idl-code" data-global-name="VREyeParameters<interface>/currentFieldOfView<attribute>" data-link-type="attribute" data-readonly="" data-type="VRFieldOfView " href="#dom-vreyeparameters-currentfieldofview">currentFieldOfView</a>;
+  readonly attribute <a data-link-type="idl-name" href="http://dev.w3.org/fxtf/geometry/#dom-domrect">DOMRect</a> <a class="idl-code" data-global-name="VREyeParameters<interface>/renderRect<attribute>" data-link-type="attribute" data-readonly="" data-type="DOMRect " href="#dom-vreyeparameters-renderrect">renderRect</a>;
 };
 </pre>
 
@@ -880,20 +880,20 @@ May be null if the sensor is incapable of providing angular acceleration.</p>
    <h4 class="heading settled" data-level="4.4.1" id="attributes0"><span class="secno">4.4.1. </span><span class="content">Attributes</span><a class="self-link" href="#attributes0"></a></h4>
 
 
-   <p><dfn class="idl-code" data-dfn-for="EyeParameters" data-dfn-type="attribute" data-export="" id="dom-eyeparameters-minimumfieldofview">minimumFieldOfView<a class="self-link" href="#dom-eyeparameters-minimumfieldofview"></a></dfn>
+   <p><dfn class="idl-code" data-dfn-for="VREyeParameters" data-dfn-type="attribute" data-export="" id="dom-vreyeparameters-minimumfieldofview">minimumFieldOfView<a class="self-link" href="#dom-vreyeparameters-minimumfieldofview"></a></dfn>
 Describes the minimum supported field of view for the eye.</p>
 
 
-   <p><dfn class="idl-code" data-dfn-for="EyeParameters" data-dfn-type="attribute" data-export="" id="dom-eyeparameters-maximumfieldofview">maximumFieldOfView<a class="self-link" href="#dom-eyeparameters-maximumfieldofview"></a></dfn>
+   <p><dfn class="idl-code" data-dfn-for="VREyeParameters" data-dfn-type="attribute" data-export="" id="dom-vreyeparameters-maximumfieldofview">maximumFieldOfView<a class="self-link" href="#dom-vreyeparameters-maximumfieldofview"></a></dfn>
 Describes the maximum supported field of view for the eye.</p>
 
 
-   <p><dfn class="idl-code" data-dfn-for="EyeParameters" data-dfn-type="attribute" data-export="" id="dom-eyeparameters-recommendedfieldofview">recommendedFieldOfView<a class="self-link" href="#dom-eyeparameters-recommendedfieldofview"></a></dfn>
+   <p><dfn class="idl-code" data-dfn-for="VREyeParameters" data-dfn-type="attribute" data-export="" id="dom-vreyeparameters-recommendedfieldofview">recommendedFieldOfView<a class="self-link" href="#dom-vreyeparameters-recommendedfieldofview"></a></dfn>
 Describes the recommended field of view for the eye. It is RECOMMENDED that this
 be set to a value based on user calibration.</p>
 
 
-   <p><dfn class="idl-code" data-dfn-for="EyeParameters" data-dfn-type="attribute" data-export="" id="dom-eyeparameters-eyetranslation">eyeTranslation<a class="self-link" href="#dom-eyeparameters-eyetranslation"></a></dfn>
+   <p><dfn class="idl-code" data-dfn-for="VREyeParameters" data-dfn-type="attribute" data-export="" id="dom-vreyeparameters-eyetranslation">eyeTranslation<a class="self-link" href="#dom-vreyeparameters-eyetranslation"></a></dfn>
 Offset from the center of the users head to the eye in meters. This value SHOULD
 represent the users inter-pupilary distance (IPD), but may also represent the
 distance from the centerpoint of the headset to the centerpoint of the lense for
@@ -901,20 +901,20 @@ the given eye. Values for the left eye MUST be negative, values for the right
 eye MUST be positive.</p>
 
 
-   <p><dfn class="idl-code" data-dfn-for="EyeParameters" data-dfn-type="attribute" data-export="" id="dom-eyeparameters-currentfieldofview">currentFieldOfView<a class="self-link" href="#dom-eyeparameters-currentfieldofview"></a></dfn>
+   <p><dfn class="idl-code" data-dfn-for="VREyeParameters" data-dfn-type="attribute" data-export="" id="dom-vreyeparameters-currentfieldofview">currentFieldOfView<a class="self-link" href="#dom-vreyeparameters-currentfieldofview"></a></dfn>
 The current field of view for the eye, as specified by setFieldOfView.
-Defaults to <code class="idl"><a data-link-type="idl" href="#dom-eyeparameters-recommendedfieldofview">recommendedFieldOfView</a></code>.</p>
+Defaults to <code class="idl"><a data-link-type="idl" href="#dom-vreyeparameters-recommendedfieldofview">recommendedFieldOfView</a></code>.</p>
 
 
-   <p><dfn class="idl-code" data-dfn-for="EyeParameters" data-dfn-type="attribute" data-export="" id="dom-eyeparameters-renderrect">renderRect<a class="self-link" href="#dom-eyeparameters-renderrect"></a></dfn>
+   <p><dfn class="idl-code" data-dfn-for="VREyeParameters" data-dfn-type="attribute" data-export="" id="dom-vreyeparameters-renderrect">renderRect<a class="self-link" href="#dom-vreyeparameters-renderrect"></a></dfn>
 Describes the viewport of a canvas into which visuals for this eye should be
-rendered. The <code class="idl"><a data-link-type="idl" href="#dom-eyeparameters-renderrect">renderRect</a></code> for the left eye and right eye MUST NOT overlap,
-and the <code class="idl"><a data-link-type="idl" href="#dom-eyeparameters-renderrect">renderRect</a></code> for the rightEye MUST be to the right of the
-<code class="idl"><a data-link-type="idl" href="#dom-eyeparameters-renderrect">renderRect</a></code> for the left eye.</p>
+rendered. The <code class="idl"><a data-link-type="idl" href="#dom-vreyeparameters-renderrect">renderRect</a></code> for the left eye and right eye MUST NOT overlap,
+and the <code class="idl"><a data-link-type="idl" href="#dom-vreyeparameters-renderrect">renderRect</a></code> for the rightEye MUST be to the right of the
+<code class="idl"><a data-link-type="idl" href="#dom-vreyeparameters-renderrect">renderRect</a></code> for the left eye.</p>
 
 
-   <p>The union of the <code class="idl"><a data-link-type="idl" href="#dom-eyeparameters-renderrect">renderRect</a></code>s for both eyes SHOULD describe the optimal
-rendering resolution for the HMD when using <code class="idl"><a data-link-type="idl" href="#dom-eyeparameters-currentfieldofview">currentFieldOfView</a></code>, such that
+   <p>The union of the <code class="idl"><a data-link-type="idl" href="#dom-vreyeparameters-renderrect">renderRect</a></code>s for both eyes SHOULD describe the optimal
+rendering resolution for the HMD when using <code class="idl"><a data-link-type="idl" href="#dom-vreyeparameters-currentfieldofview">currentFieldOfView</a></code>, such that
 the center of the users view maintains a 1:1 pixel ratio after any distortion
 to correct for HMD optics is applied to the rendering.</p>
 
@@ -925,7 +925,7 @@ introduced by the headset optics. Because of this the optimal resolution of the
 canvas will often be larger than the HMDs physical resolution to ensure that
 the final image presented to users has a 1:1 pixel ratio at the center of the
 users view. The optimal canvas resolution can be calculated from the
-<code class="idl"><a data-link-type="idl" href="#dom-eyeparameters-renderrect">renderRect</a></code> for both eyes as follows:
+<code class="idl"><a data-link-type="idl" href="#dom-vreyeparameters-renderrect">renderRect</a></code> for both eyes as follows:
 
 
     <pre>var leftEyeParams = hmd.getEyeParameters(“left”);
@@ -980,7 +980,7 @@ A user-readable name identifying the device.</p>
 
 
    <pre class="idl">interface <dfn class="idl-code" data-dfn-type="interface" data-export="" data-global-name="" id="hmdvrdevice0">HMDVRDevice<a class="self-link" href="#hmdvrdevice0"></a></dfn> : <a data-link-type="idl-name" href="#vrdevice0">VRDevice</a> {
-  <a data-link-type="idl-name" href="#eyeparameters0">EyeParameters</a> <dfn class="idl-code" data-dfn-for="HMDVRDevice" data-dfn-type="method" data-export="" data-global-name="HMDVRDevice<interface>/getEyeParameters(whichEye)<method>" data-lt="getEyeParameters(whichEye)" id="dom-hmdvrdevice-geteyeparameterswhicheye">getEyeParameters<a class="self-link" href="#dom-hmdvrdevice-geteyeparameterswhicheye"></a></dfn>(<a data-link-type="idl-name" href="#enumdef-vreye">VREye</a> <dfn class="idl-code" data-dfn-for="HMDVRDevice/getEyeParameters" data-dfn-type="argument" data-export="" data-global-name="HMDVRDevice/getEyeParameters/whichEye<argument>" id="dom-hmdvrdevice-geteyeparameters-whicheye">whichEye<a class="self-link" href="#dom-hmdvrdevice-geteyeparameters-whicheye"></a></dfn>);
+  <a data-link-type="idl-name" href="#vreyeparameters0">VREyeParameters</a> <dfn class="idl-code" data-dfn-for="HMDVRDevice" data-dfn-type="method" data-export="" data-global-name="HMDVRDevice<interface>/getEyeParameters(whichEye)<method>" data-lt="getEyeParameters(whichEye)" id="dom-hmdvrdevice-geteyeparameterswhicheye">getEyeParameters<a class="self-link" href="#dom-hmdvrdevice-geteyeparameterswhicheye"></a></dfn>(<a data-link-type="idl-name" href="#enumdef-vreye">VREye</a> <dfn class="idl-code" data-dfn-for="HMDVRDevice/getEyeParameters" data-dfn-type="argument" data-export="" data-global-name="HMDVRDevice/getEyeParameters/whichEye<argument>" id="dom-hmdvrdevice-geteyeparameters-whicheye">whichEye<a class="self-link" href="#dom-hmdvrdevice-geteyeparameters-whicheye"></a></dfn>);
   void <a class="idl-code" data-global-name="HMDVRDevice<interface>/setFieldOfView(leftFOV, rightFOV, zNear, zFar)<method>/setFieldOfView(leftFOV, rightFOV, zNear)<method>/setFieldOfView(leftFOV, rightFOV)<method>/setFieldOfView(leftFOV)<method>/setFieldOfView()<method>" data-link-type="method" href="#dom-hmdvrdevice-setfieldofview">setFieldOfView</a>(optional <a data-link-type="idl-name" href="#dictdef-vrfieldofviewinit">VRFieldOfViewInit</a> <dfn class="idl-code" data-dfn-for="HMDVRDevice/setFieldOfView" data-dfn-type="argument" data-export="" data-global-name="HMDVRDevice/setFieldOfView/leftFOV<argument>" id="dom-hmdvrdevice-setfieldofview-leftfov">leftFOV<a class="self-link" href="#dom-hmdvrdevice-setfieldofview-leftfov"></a></dfn>,
                       optional <a data-link-type="idl-name" href="#dictdef-vrfieldofviewinit">VRFieldOfViewInit</a> <dfn class="idl-code" data-dfn-for="HMDVRDevice/setFieldOfView" data-dfn-type="argument" data-export="" data-global-name="HMDVRDevice/setFieldOfView/rightFOV<argument>" id="dom-hmdvrdevice-setfieldofview-rightfov">rightFOV<a class="self-link" href="#dom-hmdvrdevice-setfieldofview-rightfov"></a></dfn>,
                       optional double <dfn class="idl-code" data-dfn-for="HMDVRDevice/setFieldOfView" data-dfn-type="argument" data-export="" data-global-name="HMDVRDevice/setFieldOfView/zNear<argument>" id="dom-hmdvrdevice-setfieldofview-znear">zNear<a class="self-link" href="#dom-hmdvrdevice-setfieldofview-znear"></a></dfn> = 0.01,
@@ -993,14 +993,14 @@ A user-readable name identifying the device.</p>
 
 
    <p><dfn class="idl-code" data-dfn-for="HMDVRDevice" data-dfn-type="method" data-export="" data-lt="getEyeParameters()" id="dom-hmdvrdevice-geteyeparameters">getEyeParameters(VREye whichEye)<a class="self-link" href="#dom-hmdvrdevice-geteyeparameters"></a></dfn>
-Return the current <code class="idl"><a data-link-type="idl" href="#eyeparameters0">EyeParameters</a></code> for the given eye.</p>
+Return the current <code class="idl"><a data-link-type="idl" href="#vreyeparameters0">VREyeParameters</a></code> for the given eye.</p>
 
 
    <p><dfn class="idl-code" data-dfn-for="HMDVRDevice" data-dfn-type="method" data-export="" data-lt="setFieldOfView()" id="dom-hmdvrdevice-setfieldofview">setFieldOfView(optional VRFieldOfViewInit leftFOV, optional VRFieldOfViewInit rightFOV, optional double zNear = 0.01, optional double zFar = 10000.0)<a class="self-link" href="#dom-hmdvrdevice-setfieldofview"></a></dfn>
 Set the field of view for both eyes.  If either of the fields of view is null,
-or if their values are all zeros, then the <code class="idl"><a data-link-type="idl" href="#dom-eyeparameters-recommendedfieldofview">recommendedFieldOfView</a></code> for that
+or if their values are all zeros, then the <code class="idl"><a data-link-type="idl" href="#dom-vreyeparameters-recommendedfieldofview">recommendedFieldOfView</a></code> for that
 eye will be used. If the field of view values for an eye exceed the
-<code class="idl"><a data-link-type="idl" href="#dom-eyeparameters-minimumfieldofview">minimumFieldOfView</a></code> or <code class="idl"><a data-link-type="idl" href="#dom-eyeparameters-maximumfieldofview">maximumFieldOfView</a></code> values for the same eye the
+<code class="idl"><a data-link-type="idl" href="#dom-vreyeparameters-minimumfieldofview">minimumFieldOfView</a></code> or <code class="idl"><a data-link-type="idl" href="#dom-vreyeparameters-maximumfieldofview">maximumFieldOfView</a></code> values for the same eye the
 values will be clamped to the valid range.</p>
 
 
@@ -1091,7 +1091,7 @@ Conformance</span><a class="self-link" href="#conformance"></a></h2>
   <ul class="indexlist">
    <li>angularAcceleration, <a href="#dom-vrpositionstate-angularacceleration">4.3.1</a>
    <li>angularVelocity, <a href="#dom-vrpositionstate-angularvelocity">4.3.1</a>
-   <li>currentFieldOfView, <a href="#dom-eyeparameters-currentfieldofview">4.4.1</a>
+   <li>currentFieldOfView, <a href="#dom-vreyeparameters-currentfieldofview">4.4.1</a>
    <li>deviceId, <a href="#dom-vrdevice-deviceid">4.5.1</a>
    <li>deviceName, <a href="#dom-vrdevice-devicename">4.5.1</a>
    <li>downDegrees
@@ -1101,8 +1101,7 @@ Conformance</span><a class="self-link" href="#conformance"></a></h2>
      <li>argument for VRFieldOfView/VRFieldOfView(upDegrees, rightDegrees, downDegrees, leftDegrees), <a href="#dom-vrfieldofview-vrfieldofviewupdegrees-rightdegrees-downdegrees-leftdegrees-downdegrees">4.2</a>
      <li>attribute for VRFieldOfView, <a href="#dom-vrfieldofview-downdegrees">4.2</a>
     </ul>
-   <li>EyeParameters, <a href="#eyeparameters0">4.4</a>
-   <li>eyeTranslation, <a href="#dom-eyeparameters-eyetranslation">4.4.1</a>
+   <li>eyeTranslation, <a href="#dom-vreyeparameters-eyetranslation">4.4.1</a>
    <li>fov, <a href="#dom-vrfieldofview-vrfieldofviewfov-fov">4.2</a>
    <li>getEyeParameters(), <a href="#dom-hmdvrdevice-geteyeparameters">4.6.1</a>
    <li>getEyeParameters(whichEye), <a href="#dom-hmdvrdevice-geteyeparameterswhicheye">4.6</a>
@@ -1130,13 +1129,13 @@ Conformance</span><a class="self-link" href="#conformance"></a></h2>
    <li>leftFOV, <a href="#dom-hmdvrdevice-setfieldofview-leftfov">4.6</a>
    <li>linearAcceleration, <a href="#dom-vrpositionstate-linearacceleration">4.3.1</a>
    <li>linearVelocity, <a href="#dom-vrpositionstate-linearvelocity">4.3.1</a>
-   <li>maximumFieldOfView, <a href="#dom-eyeparameters-maximumfieldofview">4.4.1</a>
-   <li>minimumFieldOfView, <a href="#dom-eyeparameters-minimumfieldofview">4.4.1</a>
+   <li>maximumFieldOfView, <a href="#dom-vreyeparameters-maximumfieldofview">4.4.1</a>
+   <li>minimumFieldOfView, <a href="#dom-vreyeparameters-minimumfieldofview">4.4.1</a>
    <li>orientation, <a href="#dom-vrpositionstate-orientation">4.3.1</a>
    <li>position, <a href="#dom-vrpositionstate-position">4.3.1</a>
    <li>PositionSensorVRDevice, <a href="#positionsensorvrdevice0">4.7</a>
-   <li>recommendedFieldOfView, <a href="#dom-eyeparameters-recommendedfieldofview">4.4.1</a>
-   <li>renderRect, <a href="#dom-eyeparameters-renderrect">4.4.1</a>
+   <li>recommendedFieldOfView, <a href="#dom-vreyeparameters-recommendedfieldofview">4.4.1</a>
+   <li>renderRect, <a href="#dom-vreyeparameters-renderrect">4.4.1</a>
    <li>resetSensor()
     <ul>
      <li>method for PositionSensorVRDevice, <a href="#dom-positionsensorvrdevice-resetsensor">4.7</a>
@@ -1161,6 +1160,7 @@ Conformance</span><a class="self-link" href="#conformance"></a></h2>
     </ul>
    <li>VRDevice, <a href="#vrdevice0">4.5</a>
    <li>VREye, <a href="#enumdef-vreye">4.1</a>
+   <li>VREyeParameters, <a href="#vreyeparameters0">4.4</a>
    <li>VRFieldOfView, <a href="#vrfieldofview0">4.2</a>
    <li>VRFieldOfView(fov), <a href="#dom-vrfieldofview-vrfieldofviewfov">4.2</a>
    <li>VRFieldOfViewInit, <a href="#dictdef-vrfieldofviewinit">4.2</a>
@@ -1228,16 +1228,16 @@ interface <a data-global-name="" href="#vrpositionstate0">VRPositionState</a> {
   readonly attribute <a data-link-type="idl-name" href="http://dev.w3.org/fxtf/geometry/#dom-dompoint">DOMPoint</a>? <a class="idl-code" data-global-name="VRPositionState<interface>/angularAcceleration<attribute>" data-link-type="attribute" data-readonly="" data-type="DOMPoint? " href="#dom-vrpositionstate-angularacceleration">angularAcceleration</a>;
 };
 
-interface <a data-global-name="" href="#eyeparameters0">EyeParameters</a> {
+interface <a data-global-name="" href="#vreyeparameters0">VREyeParameters</a> {
   /* These values are expected to be static per-device/per-user */
-  readonly attribute <a data-link-type="idl-name" href="#vrfieldofview0">VRFieldOfView</a> <a class="idl-code" data-global-name="EyeParameters<interface>/minimumFieldOfView<attribute>" data-link-type="attribute" data-readonly="" data-type="VRFieldOfView " href="#dom-eyeparameters-minimumfieldofview">minimumFieldOfView</a>;
-  readonly attribute <a data-link-type="idl-name" href="#vrfieldofview0">VRFieldOfView</a> <a class="idl-code" data-global-name="EyeParameters<interface>/maximumFieldOfView<attribute>" data-link-type="attribute" data-readonly="" data-type="VRFieldOfView " href="#dom-eyeparameters-maximumfieldofview">maximumFieldOfView</a>;
-  readonly attribute <a data-link-type="idl-name" href="#vrfieldofview0">VRFieldOfView</a> <a class="idl-code" data-global-name="EyeParameters<interface>/recommendedFieldOfView<attribute>" data-link-type="attribute" data-readonly="" data-type="VRFieldOfView " href="#dom-eyeparameters-recommendedfieldofview">recommendedFieldOfView</a>;
-  readonly attribute <a data-link-type="idl-name" href="http://dev.w3.org/fxtf/geometry/#dom-dompoint">DOMPoint</a> <a class="idl-code" data-global-name="EyeParameters<interface>/eyeTranslation<attribute>" data-link-type="attribute" data-readonly="" data-type="DOMPoint " href="#dom-eyeparameters-eyetranslation">eyeTranslation</a>;
+  readonly attribute <a data-link-type="idl-name" href="#vrfieldofview0">VRFieldOfView</a> <a class="idl-code" data-global-name="VREyeParameters<interface>/minimumFieldOfView<attribute>" data-link-type="attribute" data-readonly="" data-type="VRFieldOfView " href="#dom-vreyeparameters-minimumfieldofview">minimumFieldOfView</a>;
+  readonly attribute <a data-link-type="idl-name" href="#vrfieldofview0">VRFieldOfView</a> <a class="idl-code" data-global-name="VREyeParameters<interface>/maximumFieldOfView<attribute>" data-link-type="attribute" data-readonly="" data-type="VRFieldOfView " href="#dom-vreyeparameters-maximumfieldofview">maximumFieldOfView</a>;
+  readonly attribute <a data-link-type="idl-name" href="#vrfieldofview0">VRFieldOfView</a> <a class="idl-code" data-global-name="VREyeParameters<interface>/recommendedFieldOfView<attribute>" data-link-type="attribute" data-readonly="" data-type="VRFieldOfView " href="#dom-vreyeparameters-recommendedfieldofview">recommendedFieldOfView</a>;
+  readonly attribute <a data-link-type="idl-name" href="http://dev.w3.org/fxtf/geometry/#dom-dompoint">DOMPoint</a> <a class="idl-code" data-global-name="VREyeParameters<interface>/eyeTranslation<attribute>" data-link-type="attribute" data-readonly="" data-type="DOMPoint " href="#dom-vreyeparameters-eyetranslation">eyeTranslation</a>;
 
   /* These values will vary after a FOV has been set */
-  readonly attribute <a data-link-type="idl-name" href="#vrfieldofview0">VRFieldOfView</a> <a class="idl-code" data-global-name="EyeParameters<interface>/currentFieldOfView<attribute>" data-link-type="attribute" data-readonly="" data-type="VRFieldOfView " href="#dom-eyeparameters-currentfieldofview">currentFieldOfView</a>;
-  readonly attribute <a data-link-type="idl-name" href="http://dev.w3.org/fxtf/geometry/#dom-domrect">DOMRect</a> <a class="idl-code" data-global-name="EyeParameters<interface>/renderRect<attribute>" data-link-type="attribute" data-readonly="" data-type="DOMRect " href="#dom-eyeparameters-renderrect">renderRect</a>;
+  readonly attribute <a data-link-type="idl-name" href="#vrfieldofview0">VRFieldOfView</a> <a class="idl-code" data-global-name="VREyeParameters<interface>/currentFieldOfView<attribute>" data-link-type="attribute" data-readonly="" data-type="VRFieldOfView " href="#dom-vreyeparameters-currentfieldofview">currentFieldOfView</a>;
+  readonly attribute <a data-link-type="idl-name" href="http://dev.w3.org/fxtf/geometry/#dom-domrect">DOMRect</a> <a class="idl-code" data-global-name="VREyeParameters<interface>/renderRect<attribute>" data-link-type="attribute" data-readonly="" data-type="DOMRect " href="#dom-vreyeparameters-renderrect">renderRect</a>;
 };
 
 interface <a data-global-name="" href="#vrdevice0">VRDevice</a> {
@@ -1247,7 +1247,7 @@ interface <a data-global-name="" href="#vrdevice0">VRDevice</a> {
 };
 
 interface <a data-global-name="" href="#hmdvrdevice0">HMDVRDevice</a> : <a data-link-type="idl-name" href="#vrdevice0">VRDevice</a> {
-  <a data-link-type="idl-name" href="#eyeparameters0">EyeParameters</a> <a data-global-name="HMDVRDevice<interface>/getEyeParameters(whichEye)<method>" href="#dom-hmdvrdevice-geteyeparameterswhicheye">getEyeParameters</a>(<a data-link-type="idl-name" href="#enumdef-vreye">VREye</a> <a data-global-name="HMDVRDevice/getEyeParameters/whichEye<argument>" href="#dom-hmdvrdevice-geteyeparameters-whicheye">whichEye</a>);
+  <a data-link-type="idl-name" href="#vreyeparameters0">VREyeParameters</a> <a data-global-name="HMDVRDevice<interface>/getEyeParameters(whichEye)<method>" href="#dom-hmdvrdevice-geteyeparameterswhicheye">getEyeParameters</a>(<a data-link-type="idl-name" href="#enumdef-vreye">VREye</a> <a data-global-name="HMDVRDevice/getEyeParameters/whichEye<argument>" href="#dom-hmdvrdevice-geteyeparameters-whicheye">whichEye</a>);
   void <a class="idl-code" data-global-name="HMDVRDevice<interface>/setFieldOfView(leftFOV, rightFOV, zNear, zFar)<method>/setFieldOfView(leftFOV, rightFOV, zNear)<method>/setFieldOfView(leftFOV, rightFOV)<method>/setFieldOfView(leftFOV)<method>/setFieldOfView()<method>" data-link-type="method" href="#dom-hmdvrdevice-setfieldofview">setFieldOfView</a>(optional <a data-link-type="idl-name" href="#dictdef-vrfieldofviewinit">VRFieldOfViewInit</a> <a data-global-name="HMDVRDevice/setFieldOfView/leftFOV<argument>" href="#dom-hmdvrdevice-setfieldofview-leftfov">leftFOV</a>,
                       optional <a data-link-type="idl-name" href="#dictdef-vrfieldofviewinit">VRFieldOfViewInit</a> <a data-global-name="HMDVRDevice/setFieldOfView/rightFOV<argument>" href="#dom-hmdvrdevice-setfieldofview-rightfov">rightFOV</a>,
                       optional double <a data-global-name="HMDVRDevice/setFieldOfView/zNear<argument>" href="#dom-hmdvrdevice-setfieldofview-znear">zNear</a> = 0.01,
