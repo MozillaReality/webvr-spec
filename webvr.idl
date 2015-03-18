@@ -115,3 +115,7 @@ interface PositionSensorVRDevice : VRDevice {
    */
   void resetSensor();
 };
+
+partial interface Navigator {
+  Promise<sequence<VRDevice>> getVRDevices();
+};

@@ -132,7 +132,7 @@ interface VRPositionState {
 };
 </pre>
 
-### Attributes
+### Attributes ### {#vrpositionstateattributes}
 
 <dfn attribute for=VRPositionState>timeStamp</dfn>
 Monotonically increasing value that allows the author to determine if position
@@ -202,7 +202,7 @@ interface VREyeParameters {
 };
 </pre>
 
-### Attributes
+### Attributes ### {#vreyeparametersattributes}
 
 <dfn attribute for=VREyeParameters>minimumFieldOfView</dfn>
 Describes the minimum supported field of view for the eye.
@@ -268,7 +268,7 @@ interface VRDevice {
 };
 </pre>
 
-### Attributes
+### Attributes ### {#vrdeviceattributes}
 
 <dfn attribute for=VRDevice>hardwareUnitId</dfn>
 An identifier for the distinct hardware unit that this {{VRDevice}} is a part
@@ -297,7 +297,7 @@ interface HMDVRDevice : VRDevice {
 };
 </pre>
 
-### Methods
+### Methods ### {#hmdvrdevicemethods}
 
 <dfn method for=HMDVRDevice>getEyeParameters(VREye whichEye)</dfn>
 Return the current {{VREyeParameters}} for the given eye.
@@ -321,7 +321,7 @@ interface PositionSensorVRDevice : VRDevice {
 };
 </pre>
 
-### Methods
+### Methods ### {#positionsensorvrdevicemethods}
 
 <dfn method for=HMDVRDevice>getState()</dfn>
 Return a {{VRPositionState}} dictionary containing the state of this position
@@ -340,5 +340,48 @@ Return the current instantaneous sensor state.
 <dfn method for=HMDVRDevice>resetSensor()</dfn>
 Reset this sensor, treating its current position and orientation yaw as the
 "origin/zero" values.
+
+## Navigator Interface extension
+
+<pre class="idl">
+partial interface Navigator {
+  Promise&lt;sequence&lt;VRDevice&gt&gt; getVRDevices();
+};
+</pre>
+
+### Methods ### {#navigatormethods}
+
+<dfn method for=Navigator>getVRDevices()</dfn>
+Return a Promise which resolves to a list of available {{VRDevice}}s.
+Applications should iterate over the list and correlate devices that share
+{{hardwareUnitId}}s to access the full capabilities of a device.
+
+<div class="example">
+The following code finds the first available {{HMDVRDevice}} and it's
+associated {{PositionSensorVRDevice}}, if it has one.
+
+<pre>
+var gHMD, gPositionSensor;
+
+navigator.getVRDevices().then(function(devices) {
+  for (var i = 0; i < devices.length; ++i) {
+    if (devices[i] instanceof HMDVRDevice) {
+      gHMD = devices[i];
+      break;
+    }
+  }
+
+  if (gHMD) {
+    for (var i = 0; i < devices.length; ++i) {
+      if (devices[i] instanceof PositionSensorVRDevice &&
+          devices[i].hardwareUnitId == gHMD.hardwareUnitId)) {
+        gPositionSensor = devices[i];
+        break;
+      }
+    }
+  }
+});
+</pre>
+</div>
 
 # Acknowledgements # {#ack}

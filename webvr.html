@@ -562,7 +562,7 @@ span.issue, span.note {
    <h1 class="p-name no-ref" id="title">WebVR</h1>
   
    <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft,
-    <time class="dt-updated" datetime="2015-03-11">11 March 2015</time></span></h2>
+    <time class="dt-updated" datetime="2015-03-18">18 March 2015</time></span></h2>
   
    <div data-fill-with="spec-metadata">
     <dl>
@@ -581,7 +581,7 @@ span.issue, span.note {
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a>
 To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 11 March 2015,
+In addition, as of 18 March 2015,
 the editors have made this specification available under the
 <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
@@ -615,23 +615,27 @@ Parts of this work may be from another specification document.  If so, those par
       <li><a href="#vrfieldofview"><span class="secno">4.2</span> <span class="content">VRFieldOfView</span></a>
       <li><a href="#vrpositionstate"><span class="secno">4.3</span> <span class="content">VRPositionState</span></a>
        <ul class="toc">
-        <li><a href="#attributes"><span class="secno">4.3.1</span> <span class="content">Attributes</span></a>
+        <li><a href="#vrpositionstateattributes"><span class="secno">4.3.1</span> <span class="content">Attributes</span></a>
        </ul>
       <li><a href="#vreyeparameters"><span class="secno">4.4</span> <span class="content">VREyeParameters</span></a>
        <ul class="toc">
-        <li><a href="#attributes0"><span class="secno">4.4.1</span> <span class="content">Attributes</span></a>
+        <li><a href="#vreyeparametersattributes"><span class="secno">4.4.1</span> <span class="content">Attributes</span></a>
        </ul>
       <li><a href="#vrdevice"><span class="secno">4.5</span> <span class="content">VRDevice</span></a>
        <ul class="toc">
-        <li><a href="#attributes1"><span class="secno">4.5.1</span> <span class="content">Attributes</span></a>
+        <li><a href="#vrdeviceattributes"><span class="secno">4.5.1</span> <span class="content">Attributes</span></a>
        </ul>
       <li><a href="#hmdvrdevice"><span class="secno">4.6</span> <span class="content">HMDVRDevice</span></a>
        <ul class="toc">
-        <li><a href="#methods"><span class="secno">4.6.1</span> <span class="content">Methods</span></a>
+        <li><a href="#hmdvrdevicemethods"><span class="secno">4.6.1</span> <span class="content">Methods</span></a>
        </ul>
       <li><a href="#positionsensorvrdevice"><span class="secno">4.7</span> <span class="content">PositionSensorVRDevice</span></a>
        <ul class="toc">
-        <li><a href="#methods0"><span class="secno">4.7.1</span> <span class="content">Methods</span></a>
+        <li><a href="#positionsensorvrdevicemethods"><span class="secno">4.7.1</span> <span class="content">Methods</span></a>
+       </ul>
+      <li><a href="#navigator-interface-extension"><span class="secno">4.8</span> <span class="content">Navigator Interface extension</span></a>
+       <ul class="toc">
+        <li><a href="#navigatormethods"><span class="secno">4.8.1</span> <span class="content">Methods</span></a>
        </ul>
      </ul>
     <li><a href="#ack"><span class="secno">5</span> <span class="content">Acknowledgements</span></a>
@@ -791,7 +795,7 @@ The following code snippet creates a WebGL-compatible projection matrix from a
 </pre>
 
 
-   <h4 class="heading settled" data-level="4.3.1" id="attributes"><span class="secno">4.3.1. </span><span class="content">Attributes</span><a class="self-link" href="#attributes"></a></h4>
+   <h4 class="heading settled" data-level="4.3.1" id="vrpositionstateattributes"><span class="secno">4.3.1. </span><span class="content">Attributes</span><a class="self-link" href="#vrpositionstateattributes"></a></h4>
 
 
    <p><dfn class="idl-code" data-dfn-for="VRPositionState" data-dfn-type="attribute" data-export="" id="dom-vrpositionstate-timestamp">timeStamp<a class="self-link" href="#dom-vrpositionstate-timestamp"></a></dfn>
@@ -877,7 +881,7 @@ May be null if the sensor is incapable of providing angular acceleration.</p>
 </pre>
 
 
-   <h4 class="heading settled" data-level="4.4.1" id="attributes0"><span class="secno">4.4.1. </span><span class="content">Attributes</span><a class="self-link" href="#attributes0"></a></h4>
+   <h4 class="heading settled" data-level="4.4.1" id="vreyeparametersattributes"><span class="secno">4.4.1. </span><span class="content">Attributes</span><a class="self-link" href="#vreyeparametersattributes"></a></h4>
 
 
    <p><dfn class="idl-code" data-dfn-for="VREyeParameters" data-dfn-type="attribute" data-export="" id="dom-vreyeparameters-minimumfieldofview">minimumFieldOfView<a class="self-link" href="#dom-vreyeparameters-minimumfieldofview"></a></dfn>
@@ -954,7 +958,7 @@ canvas.height = Math.max(leftEyeRect.y + leftEyeRect.height,
 </pre>
 
 
-   <h4 class="heading settled" data-level="4.5.1" id="attributes1"><span class="secno">4.5.1. </span><span class="content">Attributes</span><a class="self-link" href="#attributes1"></a></h4>
+   <h4 class="heading settled" data-level="4.5.1" id="vrdeviceattributes"><span class="secno">4.5.1. </span><span class="content">Attributes</span><a class="self-link" href="#vrdeviceattributes"></a></h4>
 
 
    <p><dfn class="idl-code" data-dfn-for="VRDevice" data-dfn-type="attribute" data-export="" id="dom-vrdevice-hardwareunitid">hardwareUnitId<a class="self-link" href="#dom-vrdevice-hardwareunitid"></a></dfn>
@@ -989,7 +993,7 @@ A user-readable name identifying the device.</p>
 </pre>
 
 
-   <h4 class="heading settled" data-level="4.6.1" id="methods"><span class="secno">4.6.1. </span><span class="content">Methods</span><a class="self-link" href="#methods"></a></h4>
+   <h4 class="heading settled" data-level="4.6.1" id="hmdvrdevicemethods"><span class="secno">4.6.1. </span><span class="content">Methods</span><a class="self-link" href="#hmdvrdevicemethods"></a></h4>
 
 
    <p><dfn class="idl-code" data-dfn-for="HMDVRDevice" data-dfn-type="method" data-export="" data-lt="getEyeParameters()" id="dom-hmdvrdevice-geteyeparameters">getEyeParameters(VREye whichEye)<a class="self-link" href="#dom-hmdvrdevice-geteyeparameters"></a></dfn>
@@ -1018,7 +1022,7 @@ values will be clamped to the valid range.</p>
 </pre>
 
 
-   <h4 class="heading settled" data-level="4.7.1" id="methods0"><span class="secno">4.7.1. </span><span class="content">Methods</span><a class="self-link" href="#methods0"></a></h4>
+   <h4 class="heading settled" data-level="4.7.1" id="positionsensorvrdevicemethods"><span class="secno">4.7.1. </span><span class="content">Methods</span><a class="self-link" href="#positionsensorvrdevicemethods"></a></h4>
 
 
    <p><dfn class="idl-code" data-dfn-for="HMDVRDevice" data-dfn-type="method" data-export="" id="dom-hmdvrdevice-getstate">getState()<a class="self-link" href="#dom-hmdvrdevice-getstate"></a></dfn>
@@ -1041,6 +1045,53 @@ Return the current instantaneous sensor state.</p>
    <p><dfn class="idl-code" data-dfn-for="HMDVRDevice" data-dfn-type="method" data-export="" id="dom-hmdvrdevice-resetsensor">resetSensor()<a class="self-link" href="#dom-hmdvrdevice-resetsensor"></a></dfn>
 Reset this sensor, treating its current position and orientation yaw as the
 "origin/zero" values.</p>
+
+
+   <h3 class="heading settled" data-level="4.8" id="navigator-interface-extension"><span class="secno">4.8. </span><span class="content">Navigator Interface extension</span><a class="self-link" href="#navigator-interface-extension"></a></h3>
+
+
+   <pre class="idl">partial interface <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/#navigator">Navigator</a> {
+  Promise&lt;sequence&lt;<a data-link-type="idl-name" href="#vrdevice0">VRDevice</a>>> <a class="idl-code" data-global-name="Navigator<interface>/getVRDevices()<method>" data-link-type="method" href="#dom-navigator-getvrdevices">getVRDevices</a>();
+};
+</pre>
+
+
+   <h4 class="heading settled" data-level="4.8.1" id="navigatormethods"><span class="secno">4.8.1. </span><span class="content">Methods</span><a class="self-link" href="#navigatormethods"></a></h4>
+
+
+   <p><dfn class="idl-code" data-dfn-for="Navigator" data-dfn-type="method" data-export="" id="dom-navigator-getvrdevices">getVRDevices()<a class="self-link" href="#dom-navigator-getvrdevices"></a></dfn>
+Return a Promise which resolves to a list of available <code class="idl"><a data-link-type="idl" href="#vrdevice0">VRDevice</a></code>s.
+Applications should iterate over the list and correlate devices that share
+<code class="idl"><a data-link-type="idl" href="#dom-vrdevice-hardwareunitid">hardwareUnitId</a></code>s to access the full capabilities of a device.</p>
+
+
+   <div class="example">
+The following code finds the first available <code class="idl"><a data-link-type="idl" href="#hmdvrdevice0">HMDVRDevice</a></code> and it’s
+associated <code class="idl"><a data-link-type="idl" href="#positionsensorvrdevice0">PositionSensorVRDevice</a></code>, if it has one.
+
+
+    <pre>var gHMD, gPositionSensor;
+
+navigator.getVRDevices().then(function(devices) {
+  for (var i = 0; i &lt; devices.length; ++i) {
+    if (devices[i] instanceof HMDVRDevice) {
+      gHMD = devices[i];
+      break;
+    }
+  }
+
+  if (gHMD) {
+    for (var i = 0; i &lt; devices.length; ++i) {
+      if (devices[i] instanceof PositionSensorVRDevice &amp;&amp;
+          devices[i].hardwareUnitId == gHMD.hardwareUnitId)) {
+        gPositionSensor = devices[i];
+        break;
+      }
+    }
+  }
+});
+</pre>
+</div>
 
 
    <h2 class="heading settled" data-level="5" id="ack"><span class="secno">5. </span><span class="content">Acknowledgements</span><a class="self-link" href="#ack"></a></h2>
@@ -1115,6 +1166,7 @@ Conformance</span><a class="self-link" href="#conformance"></a></h2>
      <li>method for PositionSensorVRDevice, <a href="#dom-positionsensorvrdevice-getstate">4.7</a>
      <li>method for HMDVRDevice, <a href="#dom-hmdvrdevice-getstate">4.7.1</a>
     </ul>
+   <li>getVRDevices(), <a href="#dom-navigator-getvrdevices">4.8.1</a>
    <li>hardwareUnitId, <a href="#dom-vrdevice-hardwareunitid">4.5.1</a>
    <li>hasOrientation, <a href="#dom-vrpositionstate-hasorientation">4.3.1</a>
    <li>hasPosition, <a href="#dom-vrpositionstate-hasposition">4.3.1</a>
@@ -1178,12 +1230,18 @@ Conformance</span><a class="self-link" href="#conformance"></a></h2>
      <li><a href="http://dev.w3.org/fxtf/geometry/#dom-dompoint">DOMPoint</a>
      <li><a href="http://dev.w3.org/fxtf/geometry/#dom-domrect">DOMRect</a>
     </ul>
+   <li><a data-link-type="biblio" href="#biblio-html5">[html5]</a> defines the following terms:
+    <ul>
+     <li><a href="https://html.spec.whatwg.org/#navigator">Navigator</a>
+    </ul>
   </ul>
   <h2 class="no-num heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
   <h3 class="no-num heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
    <dt id="biblio-geometry-1"><a class="self-link" href="#biblio-geometry-1"></a>[GEOMETRY-1]
    <dd>Simon Pieters; Dirk Schulze; Rik Cabanier. <a href="http://www.w3.org/TR/geometry-1/">Geometry Interfaces Module Level 1</a>. 25 November 2014. CR. URL: <a href="http://www.w3.org/TR/geometry-1/">http://www.w3.org/TR/geometry-1/</a>
+   <dt id="biblio-html5"><a class="self-link" href="#biblio-html5"></a>[HTML5]
+   <dd>Ian Hickson; et al. <a href="http://www.w3.org/TR/html5/">HTML5</a>. 28 October 2014. REC. URL: <a href="http://www.w3.org/TR/html5/">http://www.w3.org/TR/html5/</a>
    <dt id="biblio-rfc2119"><a class="self-link" href="#biblio-rfc2119"></a>[RFC2119]
    <dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119">https://tools.ietf.org/html/rfc2119</a>
   </dl>
@@ -1258,6 +1316,10 @@ interface <a data-global-name="" href="#positionsensorvrdevice0">PositionSensorV
   <a data-link-type="idl-name" href="#vrpositionstate0">VRPositionState</a> <a data-global-name="PositionSensorVRDevice<interface>/getState()<method>" href="#dom-positionsensorvrdevice-getstate">getState</a>();
   <a data-link-type="idl-name" href="#vrpositionstate0">VRPositionState</a> <a data-global-name="PositionSensorVRDevice<interface>/getImmediateState()<method>" href="#dom-positionsensorvrdevice-getimmediatestate">getImmediateState</a>();
   void <a data-global-name="PositionSensorVRDevice<interface>/resetSensor()<method>" href="#dom-positionsensorvrdevice-resetsensor">resetSensor</a>();
+};
+
+partial interface <a class="idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/#navigator">Navigator</a> {
+  Promise&lt;sequence&lt;<a data-link-type="idl-name" href="#vrdevice0">VRDevice</a>>> <a class="idl-code" data-global-name="Navigator<interface>/getVRDevices()<method>" data-link-type="method" href="#dom-navigator-getvrdevices">getVRDevices</a>();
 };
 
 </pre></body>
