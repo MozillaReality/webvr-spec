@@ -16,18 +16,18 @@ Mailing List Archives: https://mail.mozilla.org/pipermail/web-vr-discuss/
 
 Hardware that enables Virtual Reality applications requires high-precision, low-latency interfaces to deliver an acceptable experience.
 Other interfaces, such as device orientation events, can be repurposed to surface VR input but doing so dilutes the interface's original
-intent and often does not provide the precision necessary for high quality VR. The WebVR API provides purpose-built interfaces
+intent and often does not provide the precision necessary for high-quality VR. The WebVR API provides purpose-built interfaces
 to VR hardware to allow developers to build compelling, comfortable VR experiences.
 
 # Supported Device Types # {#devtypes}
 
 At this time there are two defined variants of VRDevice, each of which is intended to describe a specific capability of a piece of hardware
-rather than all aspects of that hardware. For example, a typical Head Mounted Display such as an Oculus Rift will be exposed as two VRDevices:
-An HMDVRDevice that describes the the optical properties of the device, including Field of View and Inter-pupilary Distance, and a
-PositionSensorVRDevice, which describes the HMDs position and orientation in space.
+rather than all aspects of that hardware. For example, a typical Head-Mounted Display such as an Oculus Rift will be exposed as two VRDevices:
+An HMDVRDevice that describes the optical properties of the device, including Field of View and Interpupillary Distance, and a
+PositionSensorVRDevice, which describes the HMD's position and orientation in space.
 
 A PositionSensorVRDevice could also be provided without a corresponding HMDVRDevice to represent a piece of hardware that tracks position
-but does not have a display, such as a Six-degree-of-freedom controller.
+but does not have a display, such as a Six-degrees-of-freedom controller.
 
 Additional VRDevice types may be added over time to expose new hardware types or features as they becomes available to consumers.
 Eye tracking is an example of a potential future interface.
@@ -81,10 +81,10 @@ The following code snippet creates a WebGL-compatible projection matrix from a
 
 <pre>
 function fieldOfViewToProjectionMatrix(fov, zNear, zFar) {
-  var upTan = Math.tan(fov.upDegrees * Math.PI/180.0);
-  var downTan = Math.tan(fov.downDegrees * Math.PI/180.0);
-  var leftTan = Math.tan(fov.leftDegrees * Math.PI/180.0);
-  var rightTan = Math.tan(fov.rightDegrees * Math.PI/180.0);
+  var upTan = Math.tan(fov.upDegrees * Math.PI / 180.0);
+  var downTan = Math.tan(fov.downDegrees * Math.PI / 180.0);
+  var leftTan = Math.tan(fov.leftDegrees * Math.PI / 180.0);
+  var rightTan = Math.tan(fov.rightDegrees * Math.PI / 180.0);
   var xScale = 2.0 / (leftTan + rightTan);
   var yScale = 2.0 / (upTan + downTan);
 
@@ -141,7 +141,7 @@ increasing they can be compared to determine the ordering of updates, as newer
 values will always be greater than or equal to older values.
 
 <dfn attribute for=VRPositionState>hasPosition</dfn>
-True if the {{position}} attribute is valid. If false {{position}} MUST be null.
+True if the {{position}} attribute is valid. If false, {{position}} MUST be null.
 
 <dfn attribute for=VRPositionState>position</dfn>
 Position of the sensor at {{timeStamp}} as a 3D vector. Position is given in
@@ -149,11 +149,11 @@ meters from an origin point, which is either the position the sensor was first
 read at or the position of the sensor at the point that resetSensor was last
 called. The coordinate system uses these axis definitions:
 <ul>
- <li>Positive X is to the users right.</li>
+ <li>Positive X is to the user's right.</li>
  <li>Positive Y is up.</li>
  <li>Positive Z is behind the user.</li>
 </ul>
-All positions are given relative to the identity orientation. The w component 
+All positions are given relative to the identity orientation. The w component
 MUST be 0. May be null if the sensor is incapable of providing positional data.
 
 <dfn attribute for=VRPositionState>linearVelocity</dfn>
@@ -165,7 +165,7 @@ Linear acceleration of the sensor at {{timeStamp}}. The w component MUST be 0.
 May be null if the sensor is incapable of providing linear acceleration.
 
 <dfn attribute for=VRPositionState>hasOrientation</dfn>
-True if the {{orientation}} attribute is valid. If false {{orientation}} MUST be
+True if the {{orientation}} attribute is valid. If false, {{orientation}} MUST be
 null.
 
 <dfn attribute for=VRPositionState>orientation</dfn>
@@ -190,13 +190,13 @@ The {{VREyeParameters}} interface represents all the information required to cor
 
 <pre class="idl">
 interface VREyeParameters {
-  /* These values are expected to be static per-device/per-user */
+  /* These values are expected to be static per-device/per-user. */
   readonly attribute VRFieldOfView minimumFieldOfView;
   readonly attribute VRFieldOfView maximumFieldOfView;
   readonly attribute VRFieldOfView recommendedFieldOfView;
   readonly attribute DOMPoint eyeTranslation;
 
-  /* These values will vary after a FOV has been set */
+  /* These values will vary after a FOV has been set. */
   readonly attribute VRFieldOfView currentFieldOfView;
   readonly attribute DOMRect renderRect;
 };
@@ -215,10 +215,10 @@ Describes the recommended field of view for the eye. It is RECOMMENDED that this
 be set to a value based on user calibration.
 
 <dfn attribute for=VREyeParameters>eyeTranslation</dfn>
-Offset from the center of the users head to the eye in meters. This value SHOULD
-represent the users inter-pupilary distance (IPD), but may also represent the
-distance from the centerpoint of the headset to the centerpoint of the lense for
-the given eye. Values for the left eye MUST be negative, values for the right
+Offset from the center of the user's head to the eye in meters. This value SHOULD
+represent the user's interpupillary distance (IPD), but may also represent the
+distance from the center point of the headset to the center point of the lens for
+the given eye. Values for the left eye MUST be negative; values for the right
 eye MUST be positive.
 
 <dfn attribute for=VREyeParameters>currentFieldOfView</dfn>
@@ -233,20 +233,20 @@ and the {{renderRect}} for the rightEye MUST be to the right of the
 
 The union of the {{renderRect}}s for both eyes SHOULD describe the optimal
 rendering resolution for the HMD when using {{currentFieldOfView}}, such that
-the center of the users view maintains a 1:1 pixel ratio after any distortion
-to correct for HMD optics is applied to the rendering.
+the center of the user's view maintains a 1:1 pixel ratio after any distortion
+to correct for HMD optics applied to the rendering.
 
 <div class="example">
 Many HMDs will distort the rendered image to counteract undesired effects
 introduced by the headset optics. Because of this the optimal resolution of the
-canvas will often be larger than the HMDs physical resolution to ensure that
-the final image presented to users has a 1:1 pixel ratio at the center of the
-users view. The optimal canvas resolution can be calculated from the
+canvas will often be larger than the HMD's physical resolution to ensure that
+the final image presented to the user has a 1:1 pixel ratio at the center of the
+user's view. The optimal canvas resolution can be calculated from the
 {{renderRect}} for both eyes as follows:
 
 <pre>
-var leftEyeParams = hmd.getEyeParameters(“left”);
-var rightEyeParams = hmd.getEyeParameters(“right”);
+var leftEyeParams = hmd.getEyeParameters("left");
+var rightEyeParams = hmd.getEyeParameters("right");
 var leftEyeRect = leftEyeParams.renderRect;
 var rightEyeRect = rightEyeParams.renderRect;
 
@@ -306,7 +306,7 @@ Return the current {{VREyeParameters}} for the given eye.
 Set the field of view for both eyes.  If either of the fields of view is null,
 or if their values are all zeros, then the {{recommendedFieldOfView}} for that
 eye will be used. If the field of view values for an eye exceed the
-{{minimumFieldOfView}} or {{maximumFieldOfView}} values for the same eye the
+{{minimumFieldOfView}} or {{maximumFieldOfView}} values for the same eye, then the
 values will be clamped to the valid range.
 
 ## PositionSensorVRDevice
@@ -357,7 +357,7 @@ Applications should iterate over the list and correlate devices that share
 {{hardwareUnitId}}s to access the full capabilities of a device.
 
 <div class="example">
-The following code finds the first available {{HMDVRDevice}} and it's
+The following code finds the first available {{HMDVRDevice}} and its
 associated {{PositionSensorVRDevice}}, if it has one.
 
 <pre>

@@ -40,20 +40,20 @@ interface VRPositionState {
   readonly attribute DOMPoint? linearAcceleration;
 
   readonly attribute boolean hasOrientation;
-  // XXX should be DOMQuaternion as soon as we add that
+  // XXX should be DOMQuaternion as soon as we add that.
   readonly attribute DOMPoint? orientation;
   readonly attribute DOMPoint? angularVelocity;
   readonly attribute DOMPoint? angularAcceleration;
 };
 
 interface VREyeParameters {
-  /* These values are expected to be static per-device/per-user */
+  /* These values are expected to be static per-device/per-user. */
   readonly attribute VRFieldOfView minimumFieldOfView;
   readonly attribute VRFieldOfView maximumFieldOfView;
   readonly attribute VRFieldOfView recommendedFieldOfView;
   readonly attribute DOMPoint eyeTranslation;
 
-  /* These values will vary after a FOV has been set */
+  /* These values will vary after a FOV has been set. */
   readonly attribute VRFieldOfView currentFieldOfView;
   readonly attribute DOMRect renderRect;
 };
@@ -62,30 +62,32 @@ interface VRDevice {
   /**
    * An identifier for the distinct hardware unit that this
    * VR Device is a part of.  All VRDevice/Sensors that come
-   * from the same hardware will have the same hardwareId
+   * from the same hardware will have the same hardwareId.
    */
   readonly attribute DOMString hardwareUnitId;
 
   /**
    * An identifier for this distinct sensor/device on a physical
    * hardware device.  This shouldn't change across browser
-   * restrats, allowing configuration data to be saved based on it.
+   * restarts, allowing configuration data to be saved based on it.
    */
   readonly attribute DOMString deviceId;
 
   /**
-   * a device name, a user-readable name identifying it
+   * A device name, a user-readable name identifying it.
    */
   readonly attribute DOMString deviceName;
 };
 
 interface HMDVRDevice : VRDevice {
-  // Return the current VREyeParameters for the given eye.
+  /* Return the current VREyeParameters for the given eye. */
   VREyeParameters getEyeParameters(VREye whichEye);
 
-  // Set a field of view.  If either of the fields of view is null,
-  // or if their values are all zeros, then the recommended field of view
-  // for that eye will be used.
+  /**
+   * Set a field of view.  If either of the fields of view is null,
+   * or if their values are all zeros, then the recommended field of view
+   * for that eye will be used.
+   */
   void setFieldOfView(optional VRFieldOfViewInit leftFOV,
                       optional VRFieldOfViewInit rightFOV,
                       optional double zNear = 0.01,
@@ -93,24 +95,25 @@ interface HMDVRDevice : VRDevice {
 };
 
 interface PositionSensorVRDevice : VRDevice {
-  /*
+  /**
    * Return a VRPositionState dictionary containing the state of this position sensor
-   * for the current frame if within a requestAnimationFrame callback, or for the
-   * previous frame if not.
+   * for the current frame if within a requestAnimationFrame callback, or otherwise
+   * for previous frame.
    *
-   * The VRPositionState will contain the position, orientation, and velocity
+   * The VRPositionState will contain the position, orientation, velocity,
    * and acceleration of each of these properties.  Use "hasPosition" and "hasOrientation"
    * to check if the associated members are valid; if these are false, those members
    * will be null.
    */
   VRPositionState getState();
 
-  /*
+  /**
    * Return the current instantaneous sensor state.
    */
   VRPositionState getImmediateState();
 
-  /* Reset this sensor, treating its current position and orientation
+  /**
+   * Reset this sensor, treating its current position and orientation
    * as the "origin/zero" values.
    */
   void resetSensor();
