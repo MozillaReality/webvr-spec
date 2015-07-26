@@ -22,12 +22,16 @@ to VR hardware to allow developers to build compelling, comfortable VR experienc
 # Supported Device Types # {#devtypes}
 
 At this time there are two defined variants of VRDevice, each of which is intended to describe a specific capability of a piece of hardware
-rather than all aspects of that hardware. For example, a typical Head-Mounted Display such as an Oculus Rift will be exposed as two VRDevices:
+rather than all aspects of that hardware. For example, a Dedicated Head-Mounted Display such as an Oculus Rift will be exposed as two VRDevices:
 An HMDVRDevice that describes the optical properties of the device, including Field of View and Interpupillary Distance, and a
 PositionSensorVRDevice, which describes the HMD's position and orientation in space.
 
 A PositionSensorVRDevice could also be provided without a corresponding HMDVRDevice to represent a piece of hardware that tracks position
 but does not have a display, such as a Six-degrees-of-freedom controller.
+
+Further, mobile devices that expose their orientation and motion data can be used in conjunction with headsets as Non-Dedicated Head-Mounted Displays.
+In this case, the mobile device would constitute the PositionSensorVRDevice. However, the diversity of headset optics complicates the implementation
+of the HMDVRDevice interface. Like the PositionSensorVRDevice, it needs to support provisions independent of an HMDVRDevice. 
 
 Additional VRDevice types may be added over time to expose new hardware types or features as they becomes available to consumers.
 Eye tracking is an example of a potential future interface.
