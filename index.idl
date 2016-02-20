@@ -3,9 +3,231 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-enum VREye {
-  "left",
-  "right"
+partial interface Navigator {
+  Promise<sequence<VRDisplay>> getVRDisplays();
+
+  /**
+   * `activeVRDisplays` includes every `VRDisplay` that is currently presenting.
+   */
+  readonly attribute sequence<VRDisplay> activeVRDisplays;
+};
+
+partial interface Window {
+  attribute EventHandler onvrdisplayconnected;
+  attribute EventHandler onvrdisplaydisconnected;
+  attribute EventHandler onvrdisplaypresentchange;
+};
+
+interface VRDisplay : EventTarget {
+  readonly attribute boolean isConnected;
+  readonly attribute boolean isPresenting;
+
+  /**
+   * Dictionary of capabilities describing the VRDisplay.
+   */
+  [Constant] readonly attribute VRDisplayCapabilities capabilities;
+
+  /**
+   * If this VRDisplay supports room-scale experiences, the optional
+   * stage attribute contains details on the room-scale parameters.
+   */
+  readonly attribute VRStageParameters? stageParameters;
+
+  /* Return the current VREyeParameters for the given eye. */
+  VREyeParameters getEyeParameters(VREye whichEye);
+
+  /**
+   * An identifier for this distinct VRDisplay. Used as an
+   * association point in the Gamepad API.
+   */
+  [Constant] readonly attribute unsigned long displayId;
+
+  /**
+   * A display name, a user-readable name identifying it.
+   */
+  [Constant] readonly attribute DOMString displayName;
+
+  /**
+   * Return a VRPose containing the future predicted pose of the VRDisplay when the
+   * current frame will be presented. The value returned will not change until javascript
+   * has returned control to the browser.
+   *
+   * The VRPose will contain the position, orientation, velocity,
+   * and acceleration of each of these properties.
+   */
+  [NewObject] VRPose getPose();
+
+  /**
+   * Return the current instantaneous pose of the VRDisplay, with no
+   * prediction applied.
+   */
+  [NewObject] VRPose getImmediatePose();
+
+  /**
+   * Reset this sensor, treating its current position and orientation
+   * as the "origin/zero" values. VRPose.position,
+   * VRPose.orientation, and VRStageParameters.sittingToStandingTransform
+   * may be updated when calling resetPose(). This should only
+   * be called in a sitting space experience.
+   */
+  void resetPose();
+
+  /**
+   * z-depth defining the near plane of the eye view frustum
+   * enables mapping of values in the render target depth
+   * attachment to scene coordinates. Initially set to 0.01.
+   */
+  attribute double depthNear;
+  /**
+   * z-depth defining the far plane of the eye view frustum
+   * enables mapping of values in the render target depth
+   * attachment to scene coordinates. Initially set to 10000.0.
+   */
+  attribute double depthFar;
+
+  /**
+   * The callback passed to `requestAnimationFrame` will be called
+   * any time a new frame should be rendered. When the VRDisplay is
+   * presenting the callback will be called at the native refresh
+   * rate of the HMD. When not presenting this function acts
+   * identically to window.requestAnimationFrame. Content should make no
+   * assumptions of frame rate or vsync behavior as the HMD runs
+   * asynchronously from other displays and at differing refresh rates.
+   */
+  [Throws] long requestAnimationFrame(FrameRequestCallback callback);
+
+  /**
+   * Passing the value returned by `requestAnimationFrame` to
+   * `cancelAnimationFrame` will unregister the callback.
+   */
+  [Throws] void cancelAnimationFrame(long handle);
+
+  /**
+   * Begin presenting to the VRDisplay. Must be called in response to a user gesture.
+   * Repeat calls while already presenting will update the VRLayer being displayed.
+   */
+  Promise<void> requestPresent(VRLayer layer);
+
+  /**
+   * Stops presenting to the VRDisplay.
+   */
+  Promise<void> exitPresent();
+
+  /**
+   * Get the sources currently being presented.
+   */
+  sequence<VRLayer>? getLayers();
+
+  /**
+   * The VRLayer provided to the VRDisplay will be captured and presented
+   * in the HMD. Calling this function has the same effect on the source
+   * canvas as any other operation that uses its source image, and canvases
+   * created without preserveDrawingBuffer set to true will be cleared.
+   */
+  void submitFrame(optional VRPose pose);
+};
+
+typedef (HTMLCanvasElement or
+         OffscreenCanvas) VRSource;
+
+dictionary VRLayer {
+  /**
+   * The canvas to be presented to the VRDisplay.
+   */
+  VRSource? source = null;
+
+  /**
+   * The left and right viewports contain 4 values defining the viewport
+   * rectangles within the canvas to present to the eye in UV space.
+   * [0] left offset of the viewport (0.0 - 1.0)
+   * [1] top offset of the viewport (0.0 - 1.0)
+   * [2] width of the viewport (0.0 - 1.0)
+   * [3] height of the viewport (0.0 - 1.0)
+   */
+  sequence<float> leftViewport = [0.0, 0.0, 0.5, 1.0];
+  sequence<float> rightViewport = [0.5, 0.0, 0.5, 1.0];
+};
+VRDisplayCapabilities
+/**
+ * Values describing the capabilities of a VRDisplay.
+ * These are expected to be static per-device/per-user.
+ */
+interface VRDisplayCapabilities {
+  /**
+   * hasPosition is true if the VRDisplay is capable of tracking its position.
+   */
+  readonly attribute boolean hasPosition;
+
+  /**
+   * hasOrientation is true if the VRDisplay is capable of tracking its orientation.
+   */
+  readonly attribute boolean hasOrientation;
+
+  /**
+   * Whether or not the VRDisplay is separate from the device’s
+   * primary display. If presenting VR content will obscure
+   * other content on the device, this should be false. When
+   * false, the application should not attempt to mirror VR content
+   * or update non-VR UI because that content will not be visible.
+   */
+  readonly attribute boolean hasExternalDisplay;
+
+  /**
+   * Whether or not the VRDisplay is capable of presenting content to an HMD or similar device.
+   * Can be used to indicate “magic window” devices that are capable of 6DoF tracking but for
+   * which requestPresent is not meaningful. If false then calls to requestPresent should
+   * always fail, and getEyeParameters should return null.
+   */
+  readonly attribute boolean canPresent;
+};
+
+/**
+ * Values describing the the stage / play area for devices
+ * that support room-scale experiences.
+ */
+interface VRStageParameters {
+  /**
+   * A 16-element array containing the components of a 4x4 transform
+   * matrix. This matrix transforms the sitting-space position
+   * returned by get{Immediate}Pose() to a standing-space position.
+   */
+  readonly attribute Float32Array sittingToStandingTransform;
+
+  /**
+   * Dimensions of the play-area bounds. The bounds are defined
+   * as an axis-aligned rectangle on the floor.
+   * The center of the rectangle is at (0,0,0) in standing-space
+   * coordinates.
+   * These bounds are defined for safety purposes.
+   * Content should not require the user to move beyond these
+   * bounds; however, it is possible for the user to ignore
+   * the bounds resulting in position values outside of
+   * this rectangle.
+   */
+  readonly attribute float sizeX;
+  readonly attribute float sizeZ;
+};
+
+interface VRPose {
+  readonly attribute DOMHighResTimeStamp timestamp;
+
+  /* Unique identifier of the frame that will be rendered with this pose. */
+  readonly attribute unsigned long frameID;
+
+  /**
+   * position, linearVelocity, and linearAcceleration are 3-component vectors.
+   * position is relative to a sitting space. Transforming this point with
+   * VRStageParameters.sittingToStandingTransform converts this to standing space.
+   */
+  readonly attribute Float32Array? position;
+  readonly attribute Float32Array? linearVelocity;
+  readonly attribute Float32Array? linearAcceleration;
+
+  /* orientation is a 4-entry array representing the components of a quaternion. */
+  readonly attribute Float32Array? orientation;
+  /* angularVelocity and angularAcceleration are the components of 3-dimensional vectors. */
+  readonly attribute Float32Array? angularVelocity;
+  readonly attribute Float32Array? angularAcceleration;
 };
 
 interface VRFieldOfViewReadOnly {
@@ -15,8 +237,6 @@ interface VRFieldOfViewReadOnly {
   readonly attribute double leftDegrees;
 };
 
-[Constructor(optional VRFieldOfViewInit fov),
- Constructor(double upDegrees, double rightDegrees, double downDegrees, double leftDegrees)]
 interface VRFieldOfView : VRFieldOfViewReadOnly {
   inherit attribute double upDegrees;
   inherit attribute double rightDegrees;
@@ -31,94 +251,36 @@ dictionary VRFieldOfViewInit {
   double leftDegrees = 0.0;
 };
 
-interface VRPositionState {
-  readonly attribute double timeStamp;
-
-  readonly attribute boolean hasPosition;
-  readonly attribute DOMPoint? position;
-  readonly attribute DOMPoint? linearVelocity;
-  readonly attribute DOMPoint? linearAcceleration;
-
-  readonly attribute boolean hasOrientation;
-  // XXX should be DOMQuaternion as soon as we add that.
-  readonly attribute DOMPoint? orientation;
-  readonly attribute DOMPoint? angularVelocity;
-  readonly attribute DOMPoint? angularAcceleration;
+enum VREye {
+  "left",
+  "right"
 };
 
 interface VREyeParameters {
-  /* These values are expected to be static per-device/per-user. */
-  readonly attribute VRFieldOfView minimumFieldOfView;
-  readonly attribute VRFieldOfView maximumFieldOfView;
-  readonly attribute VRFieldOfView recommendedFieldOfView;
-  readonly attribute DOMPoint eyeTranslation;
+  /**
+   * offset is a 3-component vector representing an offset to
+   * translate the eye. This value may vary from frame
+   * to frame if the user adjusts their headset ipd.
+   */
+  [Constant, Cached] readonly attribute Float32Array offset;
 
-  /* These values will vary after a FOV has been set. */
-  readonly attribute VRFieldOfView currentFieldOfView;
-  readonly attribute DOMRect renderRect;
+  /* These values may vary as the user adjusts their headset ipd. */
+  [Constant, Cached] readonly attribute VRFieldOfView fieldOfView;
+
+  /**
+   * renderWidth and renderHeight specify the recommended render target
+   * size of each eye viewport, in pixels. If multiple eyes are rendered
+   * in a single render target, then the render target should be made large
+   * enough to fit both viewports.
+   */
+  [Constant, Cached] readonly attribute unsigned long renderWidth;
+  [Constant, Cached] readonly attribute unsigned long renderHeight;
 };
 
-interface VRDevice {
+partial interface Gamepad {
   /**
-   * An identifier for the distinct hardware unit that this
-   * VR Device is a part of.  All VRDevice/Sensors that come
-   * from the same hardware will have the same hardwareId.
+   * If non-zero, this gamepad is associated with a VRDisplay with
+   * an equal displayId.
    */
-  readonly attribute DOMString hardwareUnitId;
-
-  /**
-   * An identifier for this distinct sensor/device on a physical
-   * hardware device.  This shouldn't change across browser
-   * restarts, allowing configuration data to be saved based on it.
-   */
-  readonly attribute DOMString deviceId;
-
-  /**
-   * A device name, a user-readable name identifying it.
-   */
-  readonly attribute DOMString deviceName;
-};
-
-interface HMDVRDevice : VRDevice {
-  /* Return the current VREyeParameters for the given eye. */
-  VREyeParameters getEyeParameters(VREye whichEye);
-
-  /**
-   * Set a field of view.  If either of the fields of view is null,
-   * or if their values are all zeros, then the recommended field of view
-   * for that eye will be used.
-   */
-  void setFieldOfView(optional VRFieldOfViewInit leftFOV,
-                      optional VRFieldOfViewInit rightFOV,
-                      optional double zNear = 0.01,
-                      optional double zFar = 10000.0);
-};
-
-interface PositionSensorVRDevice : VRDevice {
-  /**
-   * Return a VRPositionState dictionary containing the state of this position sensor
-   * for the current frame if within a requestAnimationFrame callback, or otherwise
-   * for previous frame.
-   *
-   * The VRPositionState will contain the position, orientation, velocity,
-   * and acceleration of each of these properties.  Use "hasPosition" and "hasOrientation"
-   * to check if the associated members are valid; if these are false, those members
-   * will be null.
-   */
-  VRPositionState getState();
-
-  /**
-   * Return the current instantaneous sensor state.
-   */
-  VRPositionState getImmediateState();
-
-  /**
-   * Reset this sensor, treating its current position and orientation
-   * as the "origin/zero" values.
-   */
-  void resetSensor();
-};
-
-partial interface Navigator {
-  Promise<sequence<VRDevice>> getVRDevices();
+  [Constant] readonly attribute unsigned long displayId;
 };

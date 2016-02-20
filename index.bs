@@ -1,3 +1,5 @@
+<!-- Big Text: WebVR -->
+
 <h1>WebVR</h1>
 
 <pre class='metadata'>
