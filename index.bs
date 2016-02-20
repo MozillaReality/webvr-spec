@@ -2,7 +2,7 @@
 
 <pre class='metadata'>
 Status: ED
-ED: https://github.com/MozVR/webvr-spec/blob/master/webvr.html
+ED: https://mozvr.github.io/webvr-spec/
 Shortname: webvr
 Level: 1
 Editor: Vladimir Vukicevic, Mozilla http://mozilla.com/, vladimir@mozilla.com
@@ -31,7 +31,7 @@ but does not have a display, such as a Six-degrees-of-freedom controller.
 
 Further, mobile devices that expose their orientation and motion data can be used in conjunction with headsets as Non-Dedicated Head-Mounted Displays.
 In this case, the mobile device would constitute the PositionSensorVRDevice. However, the diversity of headset optics complicates the implementation
-of the HMDVRDevice interface. Like the PositionSensorVRDevice, it needs to support provisions independent of an HMDVRDevice. 
+of the HMDVRDevice interface. Like the PositionSensorVRDevice, it needs to support provisions independent of an HMDVRDevice.
 
 Additional VRDevice types may be added over time to expose new hardware types or features as they becomes available to consumers.
 Eye tracking is an example of a potential future interface.
