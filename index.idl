@@ -55,8 +55,8 @@ typedef (HTMLCanvasElement or
 
 dictionary VRLayer {
   VRSource? source = null;
-  sequence<float> leftViewport = [0.0, 0.0, 0.5, 1.0];
-  sequence<float> rightViewport = [0.5, 0.0, 0.5, 1.0];
+  sequence<float>? leftBounds = [0.0, 0.0, 0.5, 1.0];
+  sequence<float>? rightBounds = [0.5, 0.0, 0.5, 1.0];
 };
 
 interface VRDisplayCapabilities {

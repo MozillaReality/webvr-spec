@@ -130,7 +130,7 @@ interface VRDisplay : EventTarget {
    * Begin presenting to the VRDisplay. Must be called in response to a user gesture.
    * Repeat calls while already presenting will update the VRLayer being displayed.
    */
-  Promise&lt;void&gt; requestPresent();
+  Promise&lt;void&gt; requestPresent(VRLayer layer);
 
   /**
    * Stops presenting to the VRDisplay.
@@ -175,21 +175,21 @@ typedef (HTMLCanvasElement or
 dictionary VRLayer {
   VRSource? source = null;
 
-  sequence&lt;float&gt; leftViewport;
-  sequence&lt;float&gt; rightViewport;
+  sequence&lt;float&gt;? leftBounds = null;
+  sequence&lt;float&gt;? rightBounds = null;
 };
 </pre>
 
 ### Attributes ### {#vrlayer-attributes}
 
 <dfn attribute for="VRLayer">source</dfn>
-The {{isConnected}} attribute MUST return the canvas presented to the associated {{VRDisplay}}.
+The {{source}} attribute defines the canvas who's contents will be presented by the {{VRDisplay}} when <codee>VRDisplay.submitFrame</codee> is called.
 
-<dfn attribute for="VRLayer">leftViewport</dfn>
-The {{leftViewport}} contains four values defining the viewport rectangle within the {{source}} canvas to present to the eye in UV space: <code>0</code> left offset of the viewport (0.0 - 1.0); <code>1</code> top offset of the viewport (0.0 - 1.0); <code>2</code> width of the viewport (0.0 - 1.0); <code>[3]</code> height of the viewport (0.0 - 1.0). The {{leftViewport}} MUST default to <code>[0.0, 0.0, 0.5, 1.0]</code>.
+<dfn attribute for="VRLayer">leftBounds</dfn>
+The {{leftBounds}} contains four values defining the texture bounds within the {{source}} canvas to present to the eye in UV space: <code>0</code> left offset of the bounds (0.0 - 1.0); <code>1</code> top offset of the bounds (0.0 - 1.0); <code>2</code> width of the bounds (0.0 - 1.0); <code>[3]</code> height of the bounds (0.0 - 1.0). The {{leftBounds}} MUST default to <code>[0.0, 0.0, 0.5, 1.0]</code>.
 
-<dfn attribute for="VRLayer">rightViewport</dfn>
-The {{rightViewport}} contains four values defining the viewport rectangle within the {{source}} canvas to present to the eye in UV space: <code>0</code> left offset of the viewport (0.0 - 1.0); <code>1</code> top offset of the viewport (0.0 - 1.0); <code>2</code> width of the viewport (0.0 - 1.0); <code>[3]</code> height of the viewport (0.0 - 1.0). The {{rightViewport}} MUST default to <code>[0.5, 0.0, 0.5, 1.0]</code>.
+<dfn attribute for="VRLayer">rightBounds</dfn>
+The {{rightBounds}} contains four values defining the texture bounds rectangle within the {{source}} canvas to present to the eye in UV space: <code>0</code> left offset of the bounds (0.0 - 1.0); <code>1</code> top offset of the bounds (0.0 - 1.0); <code>2</code> width of the bounds (0.0 - 1.0); <code>[3]</code> height of the bounds (0.0 - 1.0). The {{rightBounds}} MUST default to <code>[0.5, 0.0, 0.5, 1.0]</code>.
 
 
 
@@ -235,25 +235,11 @@ enum VREye {
 The {{VRFieldOfView}} interface represents a field of view, as given by 4 degrees describing the view from a center point.
 
 <pre class="idl">
-interface VRFieldOfViewReadOnly {
+interface VRFieldOfView {
   readonly attribute double upDegrees;
   readonly attribute double rightDegrees;
   readonly attribute double downDegrees;
   readonly attribute double leftDegrees;
-};
-
-interface VRFieldOfView : VRFieldOfViewReadOnly {
-  inherit attribute double upDegrees;
-  inherit attribute double rightDegrees;
-  inherit attribute double downDegrees;
-  inherit attribute double leftDegrees;
-};
-
-dictionary VRFieldOfViewInit {
-  double upDegrees = 0.0;
-  double rightDegrees = 0.0;
-  double downDegrees = 0.0;
-  double leftDegrees = 0.0;
 };
 </pre>
 
@@ -325,25 +311,29 @@ values will always be greater than or equal to older values.
 Unique identifier of the frame that will be rendered with this pose.
 
 <dfn attribute for="VRPose">position</dfn>
-
 Position of the sensor at {{timestamp}} as a 3D vector. Position is given in
 meters from an origin point, which is either the position the sensor was first
-read at or the position of the sensor at the point that <code>resetPose</code> was last
-called. The coordinate system uses these axis definitions:
+read at or the position of the sensor at the point that <code>resetPose</code>
+was last called. The coordinate system uses these axis definitions:
 <ul>
  <li>Positive X is to the user's right.</li>
  <li>Positive Y is up.</li>
  <li>Positive Z is behind the user.</li>
 </ul>
-All positions are given relative to the identity orientation, a sitting space. Transforming this point with <code>VRStageParameters.sittingToStandingTransform</code> converts this to standing space. The w component MUST be 0. May be null if the sensor is incapable of providing positional data.
+All positions are given relative to the identity orientation, a sitting space.
+Transforming this point with <code>VRStageParameters.sittingToStandingTransform</code>
+converts this to standing space. May be null if the sensor is incapable of
+providing positional data. When not null MUST be a 3-element array.
 
 <dfn attribute for="VRPose">linearVelocity</dfn>
-Linear velocity of the sensor at {{timestamp}}. The w component MUST be 0.
-May be null if the sensor is incapable of providing linear velocity.
+Linear velocity of the sensor at {{timestamp}}. May be null if the sensor is
+incapable of providing linear velocity. When not null MUST be a 3-element
+array.
 
 <dfn attribute for="VRPose">linearAcceleration</dfn>
-Linear acceleration of the sensor at {{timestamp}}. The w component MUST be 0.
-May be null if the sensor is incapable of providing linear acceleration.
+Linear acceleration of the sensor at {{timestamp}}. May be null if the sensor is
+incapable of providing linear acceleration. When not null MUST be a 3-element
+array.
 
 <dfn attribute for="VRPose">orientation</dfn>
 Orientation of the sensor at {{timestamp}} as a quaternion. The orientation yaw
@@ -351,14 +341,66 @@ Orientation of the sensor at {{timestamp}} as a quaternion. The orientation yaw
 it was first read or the yaw of the sensor at the point that <code>resetPose</code> was
 last called. An orientation of {x: 0, y: 0, z: 0, w: 1} is considered to be
 "forward." May be null if the sensor is incapable of providing orientation data.
+When not null MUST be a 4-element array.
 
 <dfn attribute for="VRPose">angularVelocity</dfn>
-Angular velocity of the sensor at {{timestamp}}. The w component MUST be 0.
-May be null if the sensor is incapable of providing angular velocity.
+Angular velocity of the sensor at {{timestamp}}. May be null if the sensor is
+incapable of providing angular velocity. When not null MUST be a 3-element
+array.
 
 <dfn attribute for="VRPose">angularAcceleration</dfn>
-Angular acceleration of the sensor at {{timestamp}}. The w component MUST be 0.
-May be null if the sensor is incapable of providing angular acceleration.
+Angular acceleration of the sensor at {{timestamp}}. May be null if the sensor
+is incapable of providing angular acceleration. When not null MUST be a 3
+element array.
+
+<div class="example">
+The following code snippet creates a WebGL-compatible matrix from a
+{{VRPose}}.
+
+<pre class="lang-js">
+function poseToMatrix(pose) {
+    var out = new Float32Array(16);
+
+    // If the orientation or position are null provide defaults.
+    var q = pose.orientation ? pose.orientation : [0, 0, 0, 1];
+    var v = pose.position ? pose.position : [0, 0, 0];
+
+    // Compute some values for the quaternion math.
+    var x2 = q[0] + q[0];
+    var y2 = q[1] + q[1];
+    var z2 = q[2] + q[2];
+
+    var xx = q[0] * x2;
+    var xy = q[0] * y2;
+    var xz = q[0] * z2;
+    var yy = q[1] * y2;
+    var yz = q[1] * z2;
+    var zz = q[2] * z2;
+    var wx = q[3] * x2;
+    var wy = q[3] * y2;
+    var wz = q[3] * z2;
+
+    out[0] = 1 - (yy + zz);
+    out[1] = xy + wz;
+    out[2] = xz - wy;
+    out[3] = 0;
+    out[4] = xy - wz;
+    out[5] = 1 - (xx + zz);
+    out[6] = yz + wx;
+    out[7] = 0;
+    out[8] = xz + wy;
+    out[9] = yz - wx;
+    out[10] = 1 - (xx + yy);
+    out[11] = 0;
+    out[12] = v[0];
+    out[13] = v[1];
+    out[14] = v[2];
+    out[15] = 1;
+
+    return out;
+};
+</pre>
+</div>
 
 ## VREyeParameters ## {#vreyeparameters}
 
@@ -393,16 +435,9 @@ Describes the recommended render target height of each eye viewport, in pixels. 
 Many HMDs will distort the rendered image to counteract undesired effects introduced by the headset optics. Because of this the optimal resolution of the canvas will often be larger than the HMD's physical resolution to ensure that the final image presented to the user has a 1:1 pixel ratio at the center of the user's view. The optimal canvas resolution can be calculated from the {{renderWidth}} and {{renderHeight}} for both eyes as follows:
 
 <pre class="lang-js">
-// If we're presenting we want to use the drawing buffer size
-// recommended by the VRDisplay, since that will ensure the best
-// results post-distortion.
 var leftEye = vrDisplay.getEyeParameters("left");
 var rightEye = vrDisplay.getEyeParameters("right");
 
-// For simplicity we're going to render both eyes at the same size,
-// even if one eye needs less resolution. You can render each eye at
-// the exact size it needs, but you'll need to adjust the viewports to
-// account for that.
 canvas.width = Math.max(leftEye.renderWidth, rightEye.renderWidth) * 2;
 canvas.height = Math.max(leftEye.renderHeight, rightEye.renderHeight);
 </pre>
