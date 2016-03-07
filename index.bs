@@ -90,11 +90,11 @@ interface VRDisplay : EventTarget {
   [NewObject] VRPose getImmediatePose();
 
   /**
-   * Reset this sensor, treating its current position and orientation
-   * as the "origin/zero" values. VRPose.position, VRPose.orientation,
-   * and VRStageParameters.sittingToStandingTransform may be updated when
-   * calling resetPose(). This should be called in only sitting-space
-   * experiences.
+   * Reset the pose for this display, treating its current position and
+   * orientation as the "origin/zero" values. VRPose.position,
+   * VRPose.orientation, and VRStageParameters.sittingToStandingTransform may be
+   * updated when calling resetPose(). This should be called in only
+   * sitting-space experiences.
    */
   void resetPose();
 
@@ -141,7 +141,7 @@ interface VRDisplay : EventTarget {
   Promise&lt;void&gt; exitPresent();
 
   /**
-   * Get the sources currently being presented.
+   * Get the layers currently being presented.
    */
   sequence&lt;VRLayer&gt;? getLayers();
 
@@ -166,6 +166,28 @@ The {{isPresenting}} attribute MUST return the {{VRDisplay}}'s presentation stat
 <dfn attribute for="VRDisplay">capabilities</dfn>
 The {{capabilities}} attribute MUST return the {{VRDisplay}}'s {{VRDisplayCapabilities}} object, a dictionary of capabilities describing the {{VRDisplay}}.
 
+<dfn method for="VRDisplay">getPose()</dfn>
+Returns a {{VRPose}} describing the position, orientation, and acceleration of the {{VRDisplay}} that should be used when rendering the next frame of a scene. The User Agent MAY optionally use predictive techniques to estimate what the pose will be at the time that the next frame will be displayed to the user. The pose returned MUST NOT change until JavaScript has returned control to the browser.
+
+<dfn method for="VRDisplay">getImmediatePose()</dfn>
+Returns a {{VRPose}} describing the position, orientation, and acceleration of the {{VRDisplay}} at the time when the call was made. The User Agent SHOULD NOT use predictive techniques when constructing the pose.
+
+<dfn method for="VRDisplay">resetPose()</dfn>
+Reset the pose for the display, treating its current position and orientation as the "origin/zero" values. Future poses returned from {{getPose()}} and {{getImmediatePose()}} will describe positions relative to the {{VRDisplay}}'s position when {{resetPose()}} was last called and will treat the display's yaw when {{resetPose()}} was last called as the forward orientation. The {{VRDisplay}}'s reported roll and pitch do not change when {{resetPose()}} is called as they are relative to gravity.
+
+<dfn method for="VRDisplay">requestPresent()</dfn>
+Begins presenting the contents of the specified {{VRLayer}} on the {{VRDisplay}} and fulfills the returned promise when presentation has begun. If {{canPresent}} is false the promise MUST be rejected. The user agent MAY reject the promise for any other reason. If the {{VRDisplay}} is already presenting when {{requestPresent()}} is called the {{VRDisplay}} SHOULD update the {{VRLayer}} being presented.
+
+<dfn method for="VRDisplay">exitPresent()</dfn>
+Ends presentation to the {{VRDisplay}} and fulfills the returned promise when fully exited. If the {{VRDisplay}} is not presenting the promise MUST be rejected.
+
+<dfn method for="VRDisplay">getLayers()</dfn>
+Returns an array with the {{VRLayer}} currently being presented. MUST return NULL if the {{VRDisplay}} is not currently presenting. If the {{VRDisplay}} is presenting MUST return an array with a single element, which is the {{VRLayer}} passed in to {{requestPresent()}}.
+
+Note: Future revisions of this spec may allow {{requestPresent()}} to accept an array of {{VRLayer}}s to enable more complex rendering effects such as compositing WebGL and DOM elements together, which is why {{getLayers()}} returns an array. That functionality is not allowed by this revision of the spec.
+
+<dfn method for="VRDisplay">submitFrame()</dfn>
+Captures the current state of the {{VRLayer}} currently being presented and displays it on the {{VRDisplay}}. Optionally a {{VRPose}} can be provided to describe the pose used to render the {{VRLayer}} contents, which MAY be used by the user agent to manipulate the layer contents to improve percived latency. If no {{VRPose}} is provided the last pose returned by {{getPose()}} will be used.
 
 ## VRLayer ## {#interface-vrlayer}
 
