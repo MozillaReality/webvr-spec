@@ -23,6 +23,8 @@ urlPrefix: https://wiki.whatwg.org/wiki/OffscreenCanvas
     type: dfn; text: offscreen canvas
 urlPrefix: https://www.w3.org/TR/gamepad/
     type: interface; text: Gamepad
+urlPrefix: https://www.w3.org/TR/html51/webappapis.html
+    type: dfn; text: window.requestAnimationFrame
 </pre>
 
 
@@ -90,11 +92,11 @@ interface VRDisplay : EventTarget {
   [NewObject] VRPose getImmediatePose();
 
   /**
-   * Reset this sensor, treating its current position and orientation
-   * as the "origin/zero" values. VRPose.position, VRPose.orientation,
-   * and VRStageParameters.sittingToStandingTransform may be updated when
-   * calling resetPose(). This should be called in only sitting-space
-   * experiences.
+   * Reset the pose for this display, treating its current position and
+   * orientation as the "origin/zero" values. VRPose.position,
+   * VRPose.orientation, and VRStageParameters.sittingToStandingTransform may be
+   * updated when calling resetPose(). This should be called in only
+   * sitting-space experiences.
    */
   void resetPose();
 
@@ -141,7 +143,7 @@ interface VRDisplay : EventTarget {
   Promise&lt;void&gt; exitPresent();
 
   /**
-   * Get the sources currently being presented.
+   * Get the layers currently being presented.
    */
   sequence&lt;VRLayer&gt;? getLayers();
 
@@ -166,6 +168,37 @@ The {{isPresenting}} attribute MUST return the {{VRDisplay}}'s presentation stat
 <dfn attribute for="VRDisplay">capabilities</dfn>
 The {{capabilities}} attribute MUST return the {{VRDisplay}}'s {{VRDisplayCapabilities}} object, a dictionary of capabilities describing the {{VRDisplay}}.
 
+<dfn method for="VRDisplay">getEyeParameters()</dfn>
+Returns the current {{VREyeParameters}} for the given eye. The eye parameters MAY change at any time due to external factors, such as the user changing the IPD with hardware controls. As a result, it is recommended that these values be queried for each frame rather than cached.
+
+<dfn method for="VRDisplay">getPose()</dfn>
+Returns a {{VRPose}} describing the position, orientation, and acceleration of the {{VRDisplay}} that should be used when rendering the next frame of a scene. The User Agent MAY optionally use predictive techniques to estimate what the pose will be at the time that the next frame will be displayed to the user. The pose returned MUST NOT change until JavaScript has returned control to the browser.
+
+<dfn method for="VRDisplay">getImmediatePose()</dfn>
+Returns a {{VRPose}} describing the position, orientation, and acceleration of the {{VRDisplay}} at the time when the call was made. The User Agent SHOULD NOT use predictive techniques when constructing the pose.
+
+<dfn method for="VRDisplay">resetPose()</dfn>
+Reset the pose for the {{VRDisplay}}, treating its current position and orientation as the "origin/zero" values. Future poses returned from {{getPose()}} and {{getImmediatePose()}} will describe positions relative to the {{VRDisplay}}'s position when {{resetPose()}} was last called and will treat the display's yaw when {{resetPose()}} was last called as the forward orientation. The {{VRDisplay}}'s reported roll and pitch do not change when {{resetPose()}} is called as they are relative to gravity. Calling {{resetPose()}} may change the {{sittingToStandingTransform}} matrix of the {{VRStageParameters}}.
+
+<dfn method for="VRDisplay">requestAnimationFrame()</dfn>
+Functionally equivalent to <a href="https://www.w3.org/TR/html51/webappapis.html#animation-frames">window.requestAnimationFrame</a> when the {{VRDisplay}} is not presenting. When the {{VRDisplay}} is presenting the callback is called at the native refresh rate of the {{VRDisplay}}.
+
+<dfn method for="VRDisplay">cancelAnimationFrame()</dfn>
+Passing the value returned by {{requestAnimationFrame()}} to will unregister the callback.
+
+<dfn method for="VRDisplay">requestPresent()</dfn>
+Begins presenting the contents of the specified {{VRLayer}} on the {{VRDisplay}} and fulfills the returned promise when presentation has begun. If {{canPresent}} is false the promise MUST be rejected. The user agent MAY reject the promise for any other reason. If the {{VRDisplay}} is already presenting when {{requestPresent()}} is called the {{VRDisplay}} SHOULD update the {{VRLayer}} being presented.
+
+<dfn method for="VRDisplay">exitPresent()</dfn>
+Ends presentation to the {{VRDisplay}} and fulfills the returned promise when fully exited. If the {{VRDisplay}} is not presenting the promise MUST be rejected.
+
+<dfn method for="VRDisplay">getLayers()</dfn>
+Returns an array with the {{VRLayer}} currently being presented. MUST return NULL if the {{VRDisplay}} is not currently presenting. If the {{VRDisplay}} is presenting MUST return an array with a single element, which is the {{VRLayer}} passed in to {{requestPresent()}}.
+
+Note: Future revisions of this spec may allow {{requestPresent()}} to accept an array of {{VRLayer}}s to enable more complex rendering effects such as compositing WebGL and DOM elements together, which is why {{getLayers()}} returns an array. That functionality is not allowed by this revision of the spec.
+
+<dfn method for="VRDisplay">submitFrame()</dfn>
+Captures the current state of the {{VRLayer}} currently being presented and displays it on the {{VRDisplay}}. Optionally a {{VRPose}} can be provided to describe the pose used to render the {{VRLayer}} contents, which MAY be used by the user agent to manipulate the layer contents to improve percived latency. If no {{VRPose}} is provided the last pose returned by {{getPose()}} will be used.
 
 ## VRLayer ## {#interface-vrlayer}
 
@@ -220,7 +253,7 @@ The {{hasOrientation}} attribute MUST return whether the {{VRDisplay}} is capabl
 The {{hasExternalDisplay}} attribute MUST return whether the {{VRDisplay}} is separate from the device's primary display. If presenting VR content will obscure other content on the device, this should be false. When false, the application should not attempt to mirror VR content or update non-VR UI because that content will not be visible.
 
 <dfn attribute for="VRLayer">canPresent</dfn>
-The {{canPresent}} attribute MUST return whether the {{VRDisplay}} is capable of presenting content to an HMD or similar device. Can be used to indicate "magic window" devices that are capable of 6DoF tracking but for which {{VRDisplay}}.{{requestPresent()}} is not meaningful. If false then calls to {{VRDisplay}}.{{requestPresent()}} should always fail, and {{VRDisplay}}.{{getEyeParameters()}} should return null.
+The {{canPresent}} attribute MUST return whether the {{VRDisplay}} is capable of presenting content to an HMD or similar device. Can be used to indicate "magic window" devices that are capable of 6DoF tracking but for which {{VRDisplay}}.{{requestPresent()}} is not meaningful. If false then calls to {{VRDisplay}}.{{requestPresent()}} should always fail, and {{VRDisplay}}.{{getEyeParameters()}} should return NULL.
 
 
 ## VREye ## {#interface-vreye}
@@ -314,47 +347,50 @@ values will always be greater than or equal to older values.
 Unique identifier of the frame that will be rendered with this pose.
 
 <dfn attribute for="VRPose">position</dfn>
-Position of the sensor at {{timestamp}} as a 3D vector. Position is given in
-meters from an origin point, which is either the position the sensor was first
-read at or the position of the sensor at the point that {{resetPose()}}
+Position of the {{VRDisplay}} at {{timestamp}} as a 3D vector. Position is given
+in meters from an origin point, which is either the position the sensor was
+first read at or the position of the sensor at the point that {{resetPose()}}
 was last called. The coordinate system uses these axis definitions:
 
 * Positive X is to the user's right.
 * Positive Y is up.
 * Positive Z is behind the user.
 
-All positions are given relative to the identity orientation, a sitting space.
+All positions are given relative to the identity orientation in sitting space.
 Transforming this point with {{VRStageParameters}}.{{sittingToStandingTransform}}</code>
-converts this to standing space. May be null if the sensor is incapable of
-providing positional data. When not null MUST be a three-element array.
+converts this to standing space. MAY be NULL if the sensor is incapable of
+providing positional data. User agents MAY provide emulated position values
+through techniques such as neck modeling, but when doing so SHOULD report
+{{VRDisplayCapabilities}}.{{hasPosition}} as false. When not NULL MUST be a
+three-element array.
 
 <dfn attribute for="VRPose">linearVelocity</dfn>
-Linear velocity of the sensor at {{timestamp}}. May be null if the sensor is
-incapable of providing linear velocity. When not null MUST be a three-element
-array.
+Linear velocity of the sensor at {{timestamp}} meters per second. MAY be NULL if
+the sensor is incapable of providing linear velocity. When not NULL MUST be a
+three-element array.
 
 <dfn attribute for="VRPose">linearAcceleration</dfn>
-Linear acceleration of the sensor at {{timestamp}}. May be null if the sensor is
-incapable of providing linear acceleration. When not null MUST be a three-element
-array.
+Linear acceleration of the sensor at {{timestamp}} given in meters per second.
+MAY be NULL if the sensor is incapable of providing linear acceleration. When
+not NULL MUST be a three-element array.
 
 <dfn attribute for="VRPose">orientation</dfn>
 Orientation of the sensor at {{timestamp}} as a quaternion. The orientation yaw
 (rotation around the Y axis) is relative to the initial yaw of the sensor when
 it was first read or the yaw of the sensor at the point that {{resetPose()}} was
 last called. An orientation of {x: 0, y: 0, z: 0, w: 1} is considered to be
-"forward." May be null if the sensor is incapable of providing orientation data.
-When not null MUST be a four-element array.
+"forward." MAY be NULL if the sensor is incapable of providing orientation data.
+When not NULL MUST be a four-element array.
 
 <dfn attribute for="VRPose">angularVelocity</dfn>
-Angular velocity of the sensor at {{timestamp}}. May be null if the sensor is
-incapable of providing angular velocity. When not null MUST be a three-element
-array.
+Angular velocity of the sensor at {{timestamp}} given in radians per second. MAY
+be NULL if the sensor is incapable of providing angular velocity. When not NULL
+MUST be a three-element array.
 
 <dfn attribute for="VRPose">angularAcceleration</dfn>
-Angular acceleration of the sensor at {{timestamp}}. May be null if the sensor
-is incapable of providing angular acceleration. When not null MUST be a 3
-element array.
+Angular acceleration of the sensor at {{timestamp}} given in radians per second.
+MAY be NULL if the sensor is incapable of providing angular acceleration. When
+not NULL MUST be a three-element array.
 
 <div class="example">
 The following code snippet creates a WebGL-compatible matrix from a
@@ -364,7 +400,7 @@ The following code snippet creates a WebGL-compatible matrix from a
 function poseToMatrix (pose) {
     var out = new Float32Array(16);
 
-    // If the orientation or position are null, provide defaults.
+    // If the orientation or position are NULL, provide defaults.
     var q = pose.orientation ? pose.orientation : [0, 0, 0, 1];
     var v = pose.position ? pose.position : [0, 0, 0];
 
@@ -424,7 +460,7 @@ interface VREyeParameters {
 ### Attributes ### {#vreyeparameters-attributes}
 
 <dfn attribute for="VREyeParameters">offset</dfn>
-Offset from the center of the user's head to the eye in meters. This value SHOULD represent the user's interpupillary distance (IPD), but may also represent the distance from the center point of the headset to the center point of the lens for the given eye. Values for the left eye MUST be negative; values for the right eye MUST be positive.
+Offset from the center point between the users eyes to the center of the eye in meters. This value SHOULD represent half of the user's interpupillary distance (IPD), but MAY also represent the distance from the center point of the headset to the center point of the lens for the given eye. Values for the left eye MUST be negative; values for the right eye MUST be positive.
 
 <dfn attribute for="VREyeParameters">fieldOfView</dfn>
 The current field of view for the eye, as the user adjusts her headset IPD.
@@ -467,10 +503,10 @@ interface VRStageParameters {
 The {{sittingToStandingTransform}} attribute is a 16-element array containing the components of a 4×4 transform matrix. This matrix transforms the sitting-space position returned by {{getPose()}}/{{getImmediatePose()}} to a standing-space position.
 
 <dfn attribute for="VREyeParameters">sizeX</dfn>
-Dimension of the play-area bounds. The bounds are defined as an axis-aligned rectangle on the floor. The center of the rectangle is at (0,0,0) in standing-space coordinates. These bounds are defined for safety purposes. Content should not require the user to move beyond these bounds; however, it is possible for the user to ignore the bounds resulting in position values outside of this rectangle.
+Width of the play-area bounds in meters. The bounds are defined as an axis-aligned rectangle on the floor. The center of the rectangle is at (0,0,0) in standing-space coordinates. These bounds are defined for safety purposes. Content should not require the user to move beyond these bounds; however, it is possible for the user to ignore the bounds resulting in position values outside of this rectangle.
 
 <dfn attribute for="VREyeParameters">sizeZ</dfn>
-Dimension of the play-area bounds. The bounds are defined as an axis-aligned rectangle on the floor. The center of the rectangle is at (0,0,0) in standing-space coordinates. These bounds are defined for safety purposes. Content should not require the user to move beyond these bounds; however, it is possible for the user to ignore the bounds resulting in position values outside of this rectangle.
+Depth of the play-area bounds in meters. The bounds are defined as an axis-aligned rectangle on the floor. The center of the rectangle is at (0,0,0) in standing-space coordinates. These bounds are defined for safety purposes. Content should not require the user to move beyond these bounds; however, it is possible for the user to ignore the bounds resulting in position values outside of this rectangle.
 
 
 ## Navigator Interface extension ## {#interface-navigator}
