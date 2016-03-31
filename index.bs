@@ -133,9 +133,9 @@ interface VRDisplay : EventTarget {
 
   /**
    * Begin presenting to the VRDisplay. Must be called in response to a user gesture.
-   * Repeat calls while already presenting will update the VRLayer being displayed.
+   * Repeat calls while already presenting will update the VRLayers being displayed.
    */
-  Promise&lt;void&gt; requestPresent(VRLayer layer);
+  Promise&lt;void&gt; requestPresent(sequence&lt;VRLayer&gt; layers);
 
   /**
    * Stops presenting to the VRDisplay.
@@ -145,7 +145,7 @@ interface VRDisplay : EventTarget {
   /**
    * Get the layers currently being presented.
    */
-  sequence&lt;VRLayer&gt;? getLayers();
+  sequence&lt;VRLayer&gt; getLayers();
 
   /**
    * The VRLayer provided to the VRDisplay will be captured and presented
@@ -187,15 +187,13 @@ Functionally equivalent to <a href="https://www.w3.org/TR/html51/webappapis.html
 Passing the value returned by {{requestAnimationFrame()}} to will unregister the callback.
 
 <dfn method for="VRDisplay">requestPresent()</dfn>
-Begins presenting the contents of the specified {{VRLayer}} on the {{VRDisplay}} and fulfills the returned promise when presentation has begun. If {{canPresent}} is false the promise MUST be rejected. The user agent MAY reject the promise for any other reason. If the {{VRDisplay}} is already presenting when {{requestPresent()}} is called the {{VRDisplay}} SHOULD update the {{VRLayer}} being presented.
+Begins presenting the contents of the specified {{VRLayer}} array on the {{VRDisplay}} and fulfills the returned promise when presentation has begun. If {{canPresent}} is false the promise MUST be rejected. If the {{VRLayer}} array contains more than {{maxLayers}} elements the promise MUST be rejected. The user agent MAY reject the promise for any other reason. If the {{VRDisplay}} is already presenting when {{requestPresent()}} is called the {{VRDisplay}} SHOULD update the {{VRLayer}} list being presented. If a call to {{requestPresent()}} is rejected while the {{VRDisplay}} is already presenting the {{VRDisplay}} MUST end presentation.
 
 <dfn method for="VRDisplay">exitPresent()</dfn>
 Ends presentation to the {{VRDisplay}} and fulfills the returned promise when fully exited. If the {{VRDisplay}} is not presenting the promise MUST be rejected.
 
 <dfn method for="VRDisplay">getLayers()</dfn>
-Returns an array with the {{VRLayer}} currently being presented. MUST return NULL if the {{VRDisplay}} is not currently presenting. If the {{VRDisplay}} is presenting MUST return an array with a single element, which is the {{VRLayer}} passed in to {{requestPresent()}}.
-
-Note: Future revisions of this spec may allow {{requestPresent()}} to accept an array of {{VRLayer}}s to enable more complex rendering effects such as compositing WebGL and DOM elements together, which is why {{getLayers()}} returns an array. That functionality is not allowed by this revision of the spec.
+Returns an array with the {{VRLayer}} currently being presented. MUST return an empty array if the {{VRDisplay}} is not currently presenting. If the {{VRDisplay}} is presenting MUST return an array containing the {{VRLayer}}s last passed to {{requestPresent()}}.
 
 <dfn method for="VRDisplay">submitFrame()</dfn>
 Captures the current state of the {{VRLayer}} currently being presented and displays it on the {{VRDisplay}}. Optionally a {{VRPose}} can be provided to describe the pose used to render the {{VRLayer}} contents, which MAY be used by the user agent to manipulate the layer contents to improve percived latency. If no {{VRPose}} is provided the last pose returned by {{getPose()}} will be used.
@@ -238,6 +236,7 @@ interface VRDisplayCapabilities {
   readonly attribute boolean hasOrientation;
   readonly attribute boolean hasExternalDisplay;
   readonly attribute boolean canPresent;
+  readonly attribute unsigned long maxLayers;
 };
 </pre>
 
@@ -254,6 +253,11 @@ The {{hasExternalDisplay}} attribute MUST return whether the {{VRDisplay}} is se
 
 <dfn attribute for="VRLayer">canPresent</dfn>
 The {{canPresent}} attribute MUST return whether the {{VRDisplay}} is capable of presenting content to an HMD or similar device. Can be used to indicate "magic window" devices that are capable of 6DoF tracking but for which {{VRDisplay}}.{{requestPresent()}} is not meaningful. If false then calls to {{VRDisplay}}.{{requestPresent()}} should always fail, and {{VRDisplay}}.{{getEyeParameters()}} should return NULL.
+
+<dfn attribute for="VRLayer">maxLayers</dfn>
+Indicates the maximum length of the array that {{requestPresent()}} will accept. MUST be 1 if {{canPresent}} is true, 0 otherwise.
+
+Note: Future revisions of this spec may allow multiple layers to enable more complex rendering effects such as compositing WebGL and DOM elements together. That functionality is not allowed by this revision of the spec.
 
 
 ## VREye ## {#interface-vreye}
