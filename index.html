@@ -10,7 +10,7 @@
  *
  * Indices
  *   - .toc for the Table of Contents (<ol class="toc">)
- *     -> <span class="secno"> for the section numbers
+ *     + <span class="secno"> for the section numbers
  *   - #toc for the Table of Contents (<nav id="toc">)
  *   - ul.index for Indices (<a href="#ref">term</a><span>, in §N.M</span>)
  *   - table.index for Index Tables (e.g. for properties or elements)
@@ -113,39 +113,36 @@
 
 	div.head h2 { margin-bottom: 1.5em;}
 
-	div.head .logo {
+/** W3C Logo ******************************************************************/
+
+	.head .logo {
 		float: right;
-		margin: 0;
+		margin: 0.4rem 0 0.2rem .4rem;
 	}
 
-	@media screen {
-		div.head .logo > a {
-			display: inline-block;
-			margin: 0.4rem 0 0.2rem .4rem;
-		}
-
-		div.head img[src*="logos/W3C"] {
-			display: block;
-			border: solid #1a5e9a;
-			border-width: .65rem .7rem .6rem;
-			border-radius: .4rem;
-			background: #1a5e9a;
-			color: white;
-			font-weight: bold;
-		}
-
-		div.head a:hover > img[src*="logos/W3C"],
-		div.head a:focus > img[src*="logos/W3C"] {
-			background: #457cad;
-			border-color: #457cad;
-		}
-
-		div.head a:active > img[src*="logos/W3C"] {
-			background: #c00;
-			border-color: #c00;
-		}
+	.head img[src*="logos/W3C"] {
+		display: block;
+		border: solid #1a5e9a;
+		border-width: .65rem .7rem .6rem;
+		border-radius: .4rem;
+		background: #1a5e9a;
+		color: white;
+		font-weight: bold;
 	}
 
+	.head a:hover > img[src*="logos/W3C"],
+	.head a:focus > img[src*="logos/W3C"] {
+		opacity: .8;
+	}
+
+	.head a:active > img[src*="logos/W3C"] {
+		background: #c00;
+		border-color: #c00;
+	}
+
+	/* see also additional rules in Link Styling section */
+
+/** Copyright *****************************************************************/
 
 	p.copyright,
 	p.copyright small { font-size: small }
@@ -331,6 +328,7 @@
 		font: 100% sans-serif;   /* Reset all font styling to clear out UA styles */
 		font-family: inherit;    /* Inherit the font family. */
 		line-height: 1.2;        /* Keep wrapped headings compact */
+		hyphens: manual;         /* Hyphenated headings look weird */
 	}
 
 	h2, h3, h4, h5, h6 {
@@ -534,9 +532,11 @@
 	}
 
 	/* Backout above styling for W3C logo */
-	.head > p:first-child > a {
+	.head .logo,
+	.head .logo a {
 		border: none;
 		text-decoration: none;
+		background: transparent;
 	}
 
 /******************************************************************************/
@@ -828,8 +828,8 @@
 	table.index {
 		margin: 1em auto;
 		border-collapse: collapse;
-		width: 100%;
 		border: hidden;
+		width: 100%;
 	}
 	table.data caption,
 	table.index caption {
@@ -936,7 +936,7 @@ Possible extra rowspan handling
 
 	.toc a {
 		/* More spacing; use padding to make it part of the click target. */
-		padding-top: 0.1em;
+		padding-top: 0.1rem;
 		/* Larger, more consistently-sized click target */
 		display: block;
 		/* Reverse color scheme */
@@ -967,19 +967,14 @@ Possible extra rowspan handling
 	.toc > li li li li li { font-style:  italic;
 	                        font-size:   85%;    }
 
-	.toc > li             { margin: 1.5em 0;     }
+	.toc > li             { margin: 1.5rem 0;    }
 	.toc > li li          { margin: 0.3rem 0;    }
-	.toc > li li li       { margin-left: 2em;
-	                        margin-left: 2rem;   }
+	.toc > li li li       { margin-left: 2rem;   }
 
 	/* Section numbers in a column of their own */
-	:not(li) > .toc {
-		margin-left: 5em;
-	}
-
 	.toc .secno {
 		float: left;
-		width: 4em;
+		width: 4rem;
 		white-space: nowrap;
 	}
 	.toc > li li li li .secno {
@@ -1027,7 +1022,7 @@ Possible extra rowspan handling
 /** Index *********************************************************************/
 
 	/* Index Lists: Layout */
-	ul.index       { margin-left: 0; columns: 15em; -webkit-columns: 15em; -moz-columns: 15em; text-indent: 1em hanging; }
+	ul.index       { margin-left: 0; columns: 15em; text-indent: 1em hanging; }
 	ul.index li    { margin-left: 0; list-style: none; break-inside: avoid; }
 	ul.index li li { margin-left: 1em }
 	ul.index dl    { margin-top: 0; }
@@ -1106,6 +1101,12 @@ Possible extra rowspan handling
 	.figure .caption, .sidefigure .caption, figcaption {
 		/* in case figure is overlarge, limit caption to 50em */
 		max-width: 50rem;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.overlarge > table {
+		/* limit preferred width of table */
+		max-width: 50em;
 		margin-left: auto;
 		margin-right: auto;
 	}
@@ -1251,6 +1252,9 @@ Possible extra rowspan handling
 	.heading > a.self-link {
 		font-size: 83%;
 	}
+	li > a.self-link {
+		left: calc(-1 * (3.5rem - 26px) - 2em);
+	}
 	dfn > a.self-link {
 		top: auto;
 		left: auto;
@@ -1293,7 +1297,7 @@ Possible extra rowspan handling
 
 
 /********************************************
- Remember to remove the logo section when copypasting freshly.
+ Remember to fix the logo section when copypasting freshly.
  */
 </style>
   <meta content="Bikeshed 1.0.0" name="generator">
@@ -1394,7 +1398,7 @@ Possible extra rowspan handling
   <div class="head">
    <p data-fill-with="logo"></p>
    <h1 class="p-name no-ref" id="title">WebVR</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-03-13">13 March 2016</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-03-31">31 March 2016</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1413,7 +1417,7 @@ Possible extra rowspan handling
    <div data-fill-with="warning"></div>
    <p class="copyright" data-fill-with="copyright"><a href="http://creativecommons.org/publicdomain/zero/1.0/" rel="license"><img alt="CC0" src="https://licensebuttons.net/p/zero/1.0/80x15.png"></a> To the extent possible under law, the editors have waived all copyright
 and related or neighboring rights to this work.
-In addition, as of 13 March 2016,
+In addition, as of 31 March 2016,
 the editors have made this specification available under the <a href="http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0" rel="license">Open Web Foundation Agreement Version 1.0</a>,
 which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.
 Parts of this work may be from another specification document.  If so, those parts are instead covered by the license of that specification document. </p>
@@ -1708,8 +1712,6 @@ dictionary <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-exp
 <pre class="idl def">interface <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export="" data-lt="VRPose" id="vrpose">VRPose<span class="dfn-panel" data-deco=""><b><a href="#vrpose">#vrpose</a></b><b>Referenced in:</b><span><a href="#ref-for-vrpose-1">2.1. VRDisplay</a> <a href="#ref-for-vrpose-2">(2)</a> <a href="#ref-for-vrpose-3">(3)</a></span><span><a href="#ref-for-vrpose-4">2.1.1. Attributes</a> <a href="#ref-for-vrpose-5">(2)</a> <a href="#ref-for-vrpose-6">(3)</a> <a href="#ref-for-vrpose-7">(4)</a></span><span><a href="#ref-for-vrpose-8">2.6.1. Attributes</a></span></span></dfn> {
   readonly attribute <a data-link-type="idl-name" href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMHighResTimeStamp " href="#dom-vrpose-timestamp" id="ref-for-dom-vrpose-timestamp-1">timestamp</a>;
 
-  readonly attribute unsigned long <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="unsigned long " href="#dom-vrpose-frameid" id="ref-for-dom-vrpose-frameid-1">frameID</a>;
-
   readonly attribute Float32Array? <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="Float32Array? " href="#dom-vrpose-position" id="ref-for-dom-vrpose-position-1">position</a>;
   readonly attribute Float32Array? <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="Float32Array? " href="#dom-vrpose-linearvelocity" id="ref-for-dom-vrpose-linearvelocity-1">linearVelocity</a>;
   readonly attribute Float32Array? <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="Float32Array? " href="#dom-vrpose-linearacceleration" id="ref-for-dom-vrpose-linearacceleration-1">linearAcceleration</a>;
@@ -1724,7 +1726,6 @@ dictionary <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-exp
 state data been updated from the hardware. Since values are monotonically
 increasing, they can be compared to determine the ordering of updates, as newer
 values will always be greater than or equal to older values.</p>
-   <p><dfn class="dfn-paneled idl-code" data-dfn-for="VRPose" data-dfn-type="attribute" data-export="" data-lt="frameID" id="dom-vrpose-frameid">frameID<span class="dfn-panel" data-deco=""><b><a href="#dom-vrpose-frameid">#dom-vrpose-frameid</a></b><b>Referenced in:</b><span><a href="#ref-for-dom-vrpose-frameid-1">2.6. VRPose</a></span></span></dfn> Unique identifier of the frame that will be rendered with this pose.</p>
    <p><dfn class="dfn-paneled idl-code" data-dfn-for="VRPose" data-dfn-type="attribute" data-export="" data-lt="position" id="dom-vrpose-position">position<span class="dfn-panel" data-deco=""><b><a href="#dom-vrpose-position">#dom-vrpose-position</a></b><b>Referenced in:</b><span><a href="#ref-for-dom-vrpose-position-1">2.6. VRPose</a></span></span></dfn> Position of the <code class="idl"><a data-link-type="idl" href="#vrdisplay" id="ref-for-vrdisplay-33">VRDisplay</a></code> at <code class="idl"><a data-link-type="idl" href="#dom-vrpose-timestamp" id="ref-for-dom-vrpose-timestamp-2">timestamp</a></code> as a 3D vector. Position is given
 in meters from an origin point, which is either the position the sensor was
 first read at or the position of the sensor at the point that <code class="idl"><a data-link-type="idl" href="#dom-vrdisplay-resetpose" id="ref-for-dom-vrdisplay-resetpose-6">resetPose()</a></code> was last called. The coordinate system uses these axis definitions:</p>
@@ -2076,7 +2077,6 @@ not NULL MUST be a three-element array.</p>
    <li><a href="#dom-vrfieldofview-downdegrees">downDegrees</a><span>, in §2.5</span>
    <li><a href="#dom-vrdisplay-exitpresent">exitPresent()</a><span>, in §2.1.1</span>
    <li><a href="#dom-vreyeparameters-fieldofview">fieldOfView</a><span>, in §2.7.1</span>
-   <li><a href="#dom-vrpose-frameid">frameID</a><span>, in §2.6.1</span>
    <li><a href="#dom-vrdisplay-geteyeparameters">getEyeParameters(whichEye)</a><span>, in §2.1.1</span>
    <li><a href="#dom-vrdisplay-getimmediatepose">getImmediatePose()</a><span>, in §2.1.1</span>
    <li><a href="#dom-vrdisplay-getlayers">getLayers()</a><span>, in §2.1.1</span>
@@ -2173,12 +2173,12 @@ not NULL MUST be a three-element array.</p>
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
    <li>
-    <a data-link-type="biblio" href="#biblio-whatwg-dom">[WHATWG-DOM]</a> defines the following terms:
+    <a data-link-type="biblio">[WHATWG-DOM]</a> defines the following terms:
     <ul>
      <li><a href="https://dom.spec.whatwg.org/#eventtarget">EventTarget</a>
     </ul>
    <li>
-    <a data-link-type="biblio" href="#biblio-html">[HTML]</a> defines the following terms:
+    <a data-link-type="biblio">[HTML]</a> defines the following terms:
     <ul>
      <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler">EventHandler</a>
      <li><a href="https://html.spec.whatwg.org/multipage/browsers.html#framerequestcallback">FrameRequestCallback</a>
@@ -2339,8 +2339,6 @@ interface <a href="#vrfieldofview">VRFieldOfView</a> {
 
 interface <a href="#vrpose">VRPose</a> {
   readonly attribute <a data-link-type="idl-name" href="http://www.w3.org/TR/hr-time/#domhighrestimestamp">DOMHighResTimeStamp</a> <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMHighResTimeStamp " href="#dom-vrpose-timestamp">timestamp</a>;
-
-  readonly attribute unsigned long <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="unsigned long " href="#dom-vrpose-frameid">frameID</a>;
 
   readonly attribute Float32Array? <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="Float32Array? " href="#dom-vrpose-position">position</a>;
   readonly attribute Float32Array? <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="Float32Array? " href="#dom-vrpose-linearvelocity">linearVelocity</a>;

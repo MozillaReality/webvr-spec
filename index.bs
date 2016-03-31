@@ -323,8 +323,6 @@ The VRPose interface represents a sensor's state at a given timestamp.
 interface VRPose {
   readonly attribute DOMHighResTimeStamp timestamp;
 
-  readonly attribute unsigned long frameID;
-
   readonly attribute Float32Array? position;
   readonly attribute Float32Array? linearVelocity;
   readonly attribute Float32Array? linearAcceleration;
@@ -342,9 +340,6 @@ Monotonically increasing value that allows the author to determine if position
 state data been updated from the hardware. Since values are monotonically
 increasing, they can be compared to determine the ordering of updates, as newer
 values will always be greater than or equal to older values.
-
-<dfn attribute for="VRPose">frameID</dfn>
-Unique identifier of the frame that will be rendered with this pose.
 
 <dfn attribute for="VRPose">position</dfn>
 Position of the {{VRDisplay}} at {{timestamp}} as a 3D vector. Position is given
