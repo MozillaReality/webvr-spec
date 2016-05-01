@@ -1,5 +1,6 @@
+.PHONY: all index.html
 
-all: webvr.html
+all: index.html
 
-webvr.html: webvr.bs
-	curl https://api.csswg.org/bikeshed/ -F file=@webvr.bs -F force=1 > webvr.html
+index.html: index.bs
+	curl https://api.csswg.org/bikeshed/ -F file=@index.bs -F force=1 > index.html | tee
