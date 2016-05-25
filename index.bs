@@ -196,7 +196,7 @@ Ends presentation to the {{VRDisplay}} and fulfills the returned promise when fu
 Returns an array with the {{VRLayer}} currently being presented. MUST return an empty array if the {{VRDisplay}} is not currently presenting. If the {{VRDisplay}} is presenting MUST return an array containing the {{VRLayer}}s last passed to {{requestPresent()}}.
 
 <dfn method for="VRDisplay">submitFrame()</dfn>
-Captures the current state of the {{VRLayer}} currently being presented and displays it on the {{VRDisplay}}. Optionally a {{VRPose}} can be provided to describe the pose used to render the {{VRLayer}} contents, which MAY be used by the user agent to manipulate the layer contents to improve percived latency. If no {{VRPose}} is provided the last pose returned by {{getPose()}} will be used.
+Captures the current state of the {{VRLayer}} currently being presented and displays it on the {{VRDisplay}}. Optionally a {{VRPose}} can be provided to describe the pose used to render the {{VRLayer}} contents, which MAY be used by the user agent to manipulate the layer contents to improve perceived latency. If no {{VRPose}} is provided the last pose returned by {{getPose()}} will be used.
 
 ## VRLayer ## {#interface-vrlayer}
 
